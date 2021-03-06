@@ -1,0 +1,13 @@
+﻿cl : command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  Vec2.cpp
+  Sprite.cpp
+  ResizeEngine.cpp
+  Main.cpp
+  ImageFile.cpp
+  CTimer.cpp
+  CPlayer.cpp
+  CGameApp.cpp
+  BackBuffer.cpp
+  Generating Code...
+BackBuffer.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/SAFESEH' specification
+  Game.vcxproj -> D:\Google Classroom\Anul 2\CG\GameFramework\d_Game.exe

@@ -12,5 +12,7 @@ public class Main {
         System.out.println(person.get_land_area());
         person.buy_land(1200, 22325, 120);
         System.out.println(person.get_land_area());
+        person.buy_land(250, 12345, 120, 130);
+        System.out.println(person.get_land_area());
     }
 }

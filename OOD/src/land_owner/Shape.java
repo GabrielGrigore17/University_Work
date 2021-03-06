@@ -18,7 +18,7 @@ public class Shape {
 
     public double return_area(){
         if(is_square)
-            return  width*width;
+            return width * width;
         else
             return width * length;
     }
