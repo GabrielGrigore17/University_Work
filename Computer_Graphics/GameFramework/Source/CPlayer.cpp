@@ -65,7 +65,7 @@ void CPlayer::Update(float dt)
 	m_fTimer += dt;
 
 	// A FSM is used for sound manager 
-	switch(m_eSpeedState)
+	/*switch(m_eSpeedState)
 	{
 	case SPEED_STOP:
 		if(v > 35.0f)
@@ -89,7 +89,7 @@ void CPlayer::Update(float dt)
 				m_fTimer = 0;
 			}
 		break;
-	}
+	}*/
 
 	// NOTE: For sound you also can use MIDI but it's Win32 API it is a bit hard
 	// see msdn reference: http://msdn.microsoft.com/en-us/library/ms711640.aspx
@@ -107,17 +107,29 @@ void CPlayer::Draw()
 
 void CPlayer::Move(ULONG ulDirection)
 {
-	if( ulDirection & CPlayer::DIR_LEFT )
+	if (ulDirection & CPlayer::DIR_LEFT) {
 		m_pSprite->mVelocity.x -= .1;
+		if (m_pSprite->mPosition.x < 50)
+			m_pSprite->mVelocity.x = 0;
+	}
 
-	if( ulDirection & CPlayer::DIR_RIGHT )
+	if (ulDirection & CPlayer::DIR_RIGHT) {
 		m_pSprite->mVelocity.x += .1;
+		if (m_pSprite->mPosition.x > 730)
+			m_pSprite->mVelocity.x = 0;
+	}
 
-	if( ulDirection & CPlayer::DIR_FORWARD )
+	if (ulDirection & CPlayer::DIR_FORWARD) {
 		m_pSprite->mVelocity.y -= .1;
+		if (m_pSprite->mPosition.y < 70)
+			m_pSprite->mVelocity.y = 0;
+	}
 
-	if( ulDirection & CPlayer::DIR_BACKWARD )
+	if (ulDirection & CPlayer::DIR_BACKWARD) {
 		m_pSprite->mVelocity.y += .1;
+		if (m_pSprite->mPosition.y > 500)
+			m_pSprite->mVelocity.y = 0;
+	}
 }
 
 
