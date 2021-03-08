@@ -1,4 +1,4 @@
-package land_owner;
+package Business;
 
 public class Shape {
     private final double width;

@@ -1,4 +1,4 @@
-package land_owner;
+package Business;
 
 import java.util.ArrayList;
 import java.util.List;

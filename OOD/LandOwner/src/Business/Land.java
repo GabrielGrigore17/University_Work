@@ -1,4 +1,4 @@
-package land_owner;
+package Business;
 
 public class Land {
     private final Shape shape;

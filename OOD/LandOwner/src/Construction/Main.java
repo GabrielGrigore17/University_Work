@@ -1,4 +1,6 @@
-package land_owner;
+package Construction;
+
+import Business.Person;
 
 public class Main {
     public static void main(String[] args) {
