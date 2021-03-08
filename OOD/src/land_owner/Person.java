@@ -59,8 +59,8 @@ public class Person {
 
     public double get_land_area(){
         double area = 0;
-        for (Land list_of_land : list_of_lands) {
-            area += list_of_land.getArea();
+        for (Land land : list_of_lands) {
+            area += land.getArea();
         }
         return area;
     }
