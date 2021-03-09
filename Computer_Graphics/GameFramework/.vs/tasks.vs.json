@@ -5,6 +5,26 @@
       "taskLabel": "task-CPlayer2",
       "appliesTo": "Source/CPlayer2.cpp",
       "type": "launch"
+    },
+    {
+      "taskLabel": "task-Source",
+      "appliesTo": "Source/",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-CPlayer2",
+      "appliesTo": "Source/CPlayer2.cpp",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-CPlayer2",
+      "appliesTo": "Source/CPlayer2.cpp",
+      "type": "launch"
+    },
+    {
+      "taskLabel": "task-Source",
+      "appliesTo": "Source/",
+      "type": "launch"
     }
   ]
 }

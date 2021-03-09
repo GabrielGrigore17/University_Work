@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Compiled",
-    "\\Includes",
-    "\\Res",
-    "\\Source"
+    ""
   ],
-  "SelectedNode": "\\Source\\CPlayer.cpp",
+  "SelectedNode": "\\Game.vcxproj",
   "PreviewInSolutionExplorer": false
 }

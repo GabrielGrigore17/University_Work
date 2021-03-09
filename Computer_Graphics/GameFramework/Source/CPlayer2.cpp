@@ -107,7 +107,7 @@ void CPlayer2::Draw()
 
 void CPlayer2::Move(ULONG ulDirection)
 {
-	if (ulDirection & CPlayer::DIR_LEFT)
+	if (ulDirection & CPlayer2::DIR_LEFT)
 		m_pSprite->mVelocity.x -= .1;
 	if (m_pSprite->mPosition.x < 50 && m_pSprite->mPosition.x > 0) {
 		m_pSprite->mVelocity.x = 0;
@@ -116,7 +116,7 @@ void CPlayer2::Move(ULONG ulDirection)
 
 
 
-	if (ulDirection & CPlayer::DIR_RIGHT)
+	if (ulDirection & CPlayer2::DIR_RIGHT)
 		m_pSprite->mVelocity.x += .1;
 	if (m_pSprite->mPosition.x > 730) {
 		m_pSprite->mVelocity.x = 0;
@@ -124,7 +124,7 @@ void CPlayer2::Move(ULONG ulDirection)
 	}
 
 
-	if (ulDirection & CPlayer::DIR_FORWARD)
+	if (ulDirection & CPlayer2::DIR_FORWARD)
 		m_pSprite->mVelocity.y -= .1;
 	if (m_pSprite->mPosition.y < 70) {
 		m_pSprite->mVelocity.y = 0;
@@ -132,7 +132,7 @@ void CPlayer2::Move(ULONG ulDirection)
 	}
 
 
-	if (ulDirection & CPlayer::DIR_BACKWARD)
+	if (ulDirection & CPlayer2::DIR_BACKWARD)
 		m_pSprite->mVelocity.y += .1;
 	if (m_pSprite->mPosition.y > 500) {
 		m_pSprite->mVelocity.y = 0;

@@ -388,20 +388,44 @@ void CGameApp::ProcessInput( )
 	if ( !GetKeyboardState( pKeyBuffer ) ) return;
 
 	// Check the relevant keys
-	if ( pKeyBuffer[ VK_UP	] & 0xF0 ) Direction |= CPlayer::DIR_FORWARD;
-	if ( pKeyBuffer[ VK_DOWN  ] & 0xF0 ) Direction |= CPlayer::DIR_BACKWARD;
-	if ( pKeyBuffer[ VK_LEFT  ] & 0xF0 ) Direction |= CPlayer::DIR_LEFT;
-	if ( pKeyBuffer[ VK_RIGHT ] & 0xF0 ) Direction |= CPlayer::DIR_RIGHT;
+	if (pKeyBuffer[VK_UP] & 0xF0) {
+		Direction |= CPlayer::DIR_FORWARD;
+		m_pPlayer->Move(Direction);
+	}
+	if (pKeyBuffer[VK_DOWN] & 0xF0) {
+		Direction |= CPlayer::DIR_BACKWARD;
+		m_pPlayer->Move(Direction);
+	}
+	if (pKeyBuffer[VK_LEFT] & 0xF0) {
+		Direction |= CPlayer::DIR_LEFT;
+		m_pPlayer->Move(Direction);
+	}
+	if (pKeyBuffer[VK_RIGHT] & 0xF0) {
+		Direction |= CPlayer::DIR_RIGHT;
+		m_pPlayer->Move(Direction);
+	}
 
-	if (pKeyBuffer[0x57] & 0xF0) Direction |= CPlayer2::DIR_FORWARD;
-	if (pKeyBuffer[0x53] & 0xF0) Direction |= CPlayer2::DIR_BACKWARD;
-	if (pKeyBuffer[0x41] & 0xF0) Direction |= CPlayer2::DIR_LEFT;
-	if (pKeyBuffer[0x44] & 0xF0) Direction |= CPlayer2::DIR_RIGHT;
+	if (pKeyBuffer[0x57] & 0xF0) {
+		Direction |= CPlayer2::DIR_FORWARD;
+		m_pPlayer2->Move(Direction);
+	}
+	if (pKeyBuffer[0x53] & 0xF0) {
+		Direction |= CPlayer2::DIR_BACKWARD;
+		m_pPlayer2->Move(Direction);
+	}
+	if (pKeyBuffer[0x41] & 0xF0) {
+		Direction |= CPlayer2::DIR_LEFT;
+		m_pPlayer2->Move(Direction);
+	}
+	if (pKeyBuffer[0x44] & 0xF0) {
+		Direction |= CPlayer2::DIR_RIGHT;
+		m_pPlayer2->Move(Direction);
+	}
 
 	
 	// Move the player
-	m_pPlayer->Move(Direction);
-	m_pPlayer2->Move(Direction);
+	//m_pPlayer->Move(Direction);
+	//m_pPlayer2->Move(Direction);
 
 
 	// Now process the mouse (if the button is pressed)
