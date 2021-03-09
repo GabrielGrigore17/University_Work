@@ -1,9 +1,11 @@
 {
   "ExpandedNodes": [
     "",
+    "\\Compiled",
+    "\\Includes",
     "\\Res",
     "\\Source"
   ],
-  "SelectedNode": "\\Source\\Main.cpp",
+  "SelectedNode": "\\Source\\CPlayer.cpp",
   "PreviewInSolutionExplorer": false
 }

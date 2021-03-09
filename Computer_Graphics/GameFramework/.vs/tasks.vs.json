@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "task-CPlayer2",
+      "appliesTo": "Source/CPlayer2.cpp",
+      "type": "launch"
+    }
+  ]
+}

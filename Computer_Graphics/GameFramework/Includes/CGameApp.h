@@ -15,6 +15,7 @@
 #include "Main.h"
 #include "CTimer.h"
 #include "CPlayer.h"
+#include "CPlayer2.h"
 #include "BackBuffer.h"
 #include "ImageFile.h"
 
@@ -90,6 +91,7 @@ private:
 
 	BackBuffer*				m_pBBuffer;
 	CPlayer*				m_pPlayer;
+	CPlayer2*				m_pPlayer2;
 };
 
 #endif // _CGAMEAPP_H_

@@ -28,6 +28,8 @@ CGameApp::CGameApp()
 	m_hMenu			= NULL;
 	m_pBBuffer		= NULL;
 	m_pPlayer		= NULL;
+	m_pPlayer2		= NULL;
+
 	m_LastFrameRate = 0;
 }
 
@@ -257,6 +259,10 @@ LRESULT CGameApp::DisplayWndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM
 				fTimer = SetTimer(m_hWnd, 1, 250, NULL);
 				m_pPlayer->Explode();
 				break;
+			case 0x51:
+				fTimer = SetTimer(m_hWnd, 1, 250, NULL);
+				m_pPlayer2->Explode();
+				break;
 			}
 			break;
 
@@ -264,7 +270,7 @@ LRESULT CGameApp::DisplayWndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM
 			switch(wParam)
 			{
 			case 1:
-				if(!m_pPlayer->AdvanceExplosion())
+				if(!m_pPlayer->AdvanceExplosion()|| !m_pPlayer2->AdvanceExplosion())
 					KillTimer(m_hWnd, 1);
 			}
 			break;
@@ -288,6 +294,7 @@ bool CGameApp::BuildObjects()
 {
 	m_pBBuffer = new BackBuffer(m_hWnd, m_nViewWidth, m_nViewHeight);
 	m_pPlayer = new CPlayer(m_pBBuffer);
+	m_pPlayer2 = new CPlayer2(m_pBBuffer);
 
 	if(!m_imgBackground.LoadBitmapFromFile("data/background.bmp", GetDC(m_hWnd)))
 		return false;
@@ -303,6 +310,7 @@ bool CGameApp::BuildObjects()
 void CGameApp::SetupGameState()
 {
 	m_pPlayer->Position() = Vec2(100, 400);
+	m_pPlayer2->Position() = Vec2(300, 400);
 }
 
 //-----------------------------------------------------------------------------
@@ -316,6 +324,12 @@ void CGameApp::ReleaseObjects( )
 	{
 		delete m_pPlayer;
 		m_pPlayer = NULL;
+	}
+
+	if (m_pPlayer2 != NULL)
+	{
+		delete m_pPlayer2;
+		m_pPlayer2 = NULL;
 	}
 
 	if(m_pBBuffer != NULL)
@@ -379,9 +393,15 @@ void CGameApp::ProcessInput( )
 	if ( pKeyBuffer[ VK_LEFT  ] & 0xF0 ) Direction |= CPlayer::DIR_LEFT;
 	if ( pKeyBuffer[ VK_RIGHT ] & 0xF0 ) Direction |= CPlayer::DIR_RIGHT;
 
+	if (pKeyBuffer[0x57] & 0xF0) Direction |= CPlayer2::DIR_FORWARD;
+	if (pKeyBuffer[0x53] & 0xF0) Direction |= CPlayer2::DIR_BACKWARD;
+	if (pKeyBuffer[0x41] & 0xF0) Direction |= CPlayer2::DIR_LEFT;
+	if (pKeyBuffer[0x44] & 0xF0) Direction |= CPlayer2::DIR_RIGHT;
+
 	
 	// Move the player
 	m_pPlayer->Move(Direction);
+	m_pPlayer2->Move(Direction);
 
 
 	// Now process the mouse (if the button is pressed)
@@ -406,6 +426,7 @@ void CGameApp::ProcessInput( )
 void CGameApp::AnimateObjects()
 {
 	m_pPlayer->Update(m_Timer.GetTimeElapsed());
+	m_pPlayer2->Update(m_Timer.GetTimeElapsed());
 }
 
 //-----------------------------------------------------------------------------
@@ -419,6 +440,7 @@ void CGameApp::DrawObjects()
 	m_imgBackground.Paint(m_pBBuffer->getDC(), 0, 0);
 
 	m_pPlayer->Draw();
+	m_pPlayer2->Draw();
 
 	m_pBBuffer->present();
 }
