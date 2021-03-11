@@ -2,11 +2,10 @@ package Business;
 
 public class Square implements Shape{
 
-    private double side;
-    private int id;
+    private final double side;
+    private final int id;
 
     public Square(double side, int id) {
-        super();
         this.side = side;
         this.id = id;
     }

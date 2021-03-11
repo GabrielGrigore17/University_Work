@@ -2,12 +2,11 @@ package Business;
 
 public class Rectangle implements Shape{
 
-    private double height;
-    private double width;
-    private int id;
+    private final double height;
+    private final double width;
+    private final int id;
 
     public Rectangle(double height, double width, int id) {
-        super();
         this.height = height;
         this.width = width;
         this.id = id;

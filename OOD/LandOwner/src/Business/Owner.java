@@ -1,10 +1,11 @@
 package Business;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Owner {
 
-    List<Shape> lands;
+    List<Shape> lands = new ArrayList<>();
 
     public void buyLand(Shape shape){
         for (Shape land : lands){

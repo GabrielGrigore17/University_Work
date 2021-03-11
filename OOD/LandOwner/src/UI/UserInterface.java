@@ -36,18 +36,22 @@ public class UserInterface {
                         int id = scanner.nextInt();
                         owner.buyLand(new Square(side, id));
                     }
+                    break;
                 }
                 case 2:{
                     String sellPrompt = "Please enter the land ID";
                     System.out.println(sellPrompt);
                     int id = scanner.nextInt();
                     owner.sellLand(id);
+                    break;
                 }
                 case 3:{
                     System.out.println(owner.getTotalArea());
+                    break;
                 }
                 default:{
                     isOn = false;
+                    break;
                 }
             }
             System.out.println();
