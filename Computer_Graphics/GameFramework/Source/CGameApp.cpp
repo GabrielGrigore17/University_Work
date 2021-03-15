@@ -259,6 +259,12 @@ LRESULT CGameApp::DisplayWndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM
 				fTimer = SetTimer(m_hWnd, 1, 250, NULL);
 				m_pPlayer->Explode();
 				break;
+			case VK_SPACE:
+				m_pPlayer->Shoot();
+				break;
+			case VK_CONTROL:
+				m_pPlayer2->Shoot();
+				break;
 			case 0x51:
 				fTimer = SetTimer(m_hWnd, 1, 250, NULL);
 				m_pPlayer2->Explode();

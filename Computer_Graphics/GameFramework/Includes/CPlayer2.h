@@ -60,16 +60,20 @@ public:
 
 	void					Explode();
 	bool					AdvanceExplosion();
+	void                    Shoot();
 
 private:
 	//-------------------------------------------------------------------------
 	// Private Variables for This Class.
 	//-------------------------------------------------------------------------
 	Sprite* m_pSprite;
+	Sprite* bullet;
+	Sprite* bullet2;
 	ESpeedStates			m_eSpeedState;
 	float					m_fTimer;
 
 	bool					m_bExplosion;
+	bool                    m_bullet;
 	AnimatedSprite* m_pExplosionSprite;
 	int						m_iExplosionFrame;
 };

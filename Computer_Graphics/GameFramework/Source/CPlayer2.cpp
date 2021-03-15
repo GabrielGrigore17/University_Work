@@ -35,6 +35,13 @@ CPlayer2::CPlayer2(const BackBuffer* pBackBuffer)
 	m_pExplosionSprite->setBackBuffer(pBackBuffer);
 	m_bExplosion = false;
 	m_iExplosionFrame = 0;
+
+	bullet = new Sprite("data/bullet.bmp", "data/bullet_mask.bmp");
+	bullet->setBackBuffer(pBackBuffer);
+	m_bullet = false;
+
+	bullet2 = new Sprite("data/bullet.bmp", "data/bullet_mask.bmp");
+	bullet2->setBackBuffer(pBackBuffer);
 }
 
 //-----------------------------------------------------------------------------
@@ -44,12 +51,16 @@ CPlayer2::CPlayer2(const BackBuffer* pBackBuffer)
 CPlayer2::~CPlayer2()
 {
 	delete m_pSprite;
+	delete bullet;
+	delete bullet2;
 	delete m_pExplosionSprite;
 }
 
 void CPlayer2::Update(float dt)
 {
 	// Update sprite
+	bullet->update(dt);
+	bullet2->update(dt);
 	m_pSprite->update(dt);
 
 
@@ -99,6 +110,10 @@ void CPlayer2::Update(float dt)
 
 void CPlayer2::Draw()
 {
+	if (m_bullet && !m_bExplosion) {
+		bullet->draw();
+		bullet2->draw();
+	}
 	if (!m_bExplosion)
 		m_pSprite->draw();
 	else
@@ -176,4 +191,20 @@ bool CPlayer2::AdvanceExplosion()
 	}
 
 	return true;
+}
+
+void CPlayer2::Shoot() {
+	RECT desktop;
+	GetWindowRect(GetDesktopWindow(), &desktop);
+	if (bullet->mPosition.y < desktop.top) {
+		bullet->mPosition.x = m_pSprite->mPosition.x - 20;
+		bullet->mPosition.y = m_pSprite->mPosition.y - 30;
+
+		bullet2->mPosition.x = m_pSprite->mPosition.x + 20;
+		bullet2->mPosition.y = m_pSprite->mPosition.y - 30;
+
+	}
+	bullet->mVelocity.y = -1000;
+	bullet2->mVelocity.y = -1000;
+	m_bullet = true;
 }
