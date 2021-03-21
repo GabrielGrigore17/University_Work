@@ -5,5 +5,40 @@ import java.util.List;
 
 public class TaxCollector {
 
-    List<Owner> taxPayers = new ArrayList<>();
+    private final List<TaxPayer> taxPayers = new ArrayList<>();
+    private double totalTax;
+
+    public void removeTaxPayer(double SSN){
+        taxPayers.removeIf(taxPayer -> taxPayer.getSSN() == SSN);
+        totalTaxRefresh();
+    }
+
+    public void addTaxPayer(int SSN){
+        taxPayers.add(new TaxPayer(SSN));
+    }
+
+    public void addLotToTaxPayer(int SSN, Shape shape){
+        for(TaxPayer taxPayer: taxPayers){
+            if(taxPayer.getSSN() == SSN)
+                taxPayer.addLot(shape);
+        }
+    }
+
+    public void removeLotFromTaxPayer(int SSN, int id){
+        for(TaxPayer taxPayer: taxPayers){
+            if(taxPayer.getSSN() == SSN)
+                taxPayer.removeLot(id);
+        }
+    }
+
+    public double getTotalTax(){
+        return totalTax;
+    }
+
+    private void totalTaxRefresh(){
+        this.totalTax = 0;
+        for(TaxPayer taxPayer: taxPayers)
+            this.totalTax += taxPayer.getTaxAmount();
+    }
+
 }
