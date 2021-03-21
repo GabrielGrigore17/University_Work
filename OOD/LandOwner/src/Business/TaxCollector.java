@@ -8,7 +8,7 @@ public class TaxCollector {
     private final List<TaxPayer> taxPayers = new ArrayList<>();
     private double totalTax;
 
-    public void removeTaxPayer(double SSN){
+    public void removeTaxPayer(int SSN){
         taxPayers.removeIf(taxPayer -> taxPayer.getSSN() == SSN);
         totalTaxRefresh();
     }
@@ -22,6 +22,7 @@ public class TaxCollector {
             if(taxPayer.getSSN() == SSN)
                 taxPayer.addLot(shape);
         }
+        totalTaxRefresh();
     }
 
     public void removeLotFromTaxPayer(int SSN, int id){
@@ -29,6 +30,7 @@ public class TaxCollector {
             if(taxPayer.getSSN() == SSN)
                 taxPayer.removeLot(id);
         }
+        totalTaxRefresh();
     }
 
     public double getTotalTax(){
