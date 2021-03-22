@@ -20,8 +20,8 @@ public class TaxPayer {
         landManager.sellLand(id);
     }
 
-    public double getTaxAmount(){
-        return 0.01 * landManager.getTotalArea();
+    public double getLandArea(){
+        return landManager.getTotalArea();
     }
 
 

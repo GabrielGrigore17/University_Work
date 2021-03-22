@@ -9,11 +9,13 @@ public class TaxAppUI {
             "Press 2 to remove a tax payer\n" +
             "Press 3 to add a lot to a tax payer\n" +
             "Press 4 to remove a lot from a tax payer\n" +
-            "Press 5 to get the total tax\n";
+            "Press 5 to get the total tax\n" +
+            "Press 6 to change the tax per square meter";
     static final String ssnPrompt = "Please enter the Social Security Number:\n";
     static final String addLotPrompt = "Please press 1 for rectangle, 2 for square, 3 for triangle, 4 for circle";
     static final String removeLotPrompt = "Please enter the land ID";
     static final String getTotalPrompt = "This is the total amount ";
+    static final String changeTaxPrompt = "Please insert the new tax per square meter";
     static final String rectanglePrompt = "Please enter the height, width, ID separated by a space";
     static final String squarePrompt = "Please enter the side and ID separated by a space";
     static final String trianglePrompt = "Please enter the side, height, ID separated by a space";
@@ -92,6 +94,12 @@ public class TaxAppUI {
                 case 5:{
                     System.out.println(getTotalPrompt);
                     System.out.println(taxCollector.getTotalTax());
+                    break;
+                }
+                case 6:{
+                    System.out.println(changeTaxPrompt);
+                    double tax = scanner.nextDouble();
+                    taxCollector.changeTaxPerSquareMeter(tax);
                     break;
                 }
                 default:{
