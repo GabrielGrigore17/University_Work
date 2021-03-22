@@ -34,6 +34,14 @@ public class TaxCollector {
         totalTaxRefresh();
     }
 
+    public double getTaxOwedByATaxPayer(int SSN){
+        for(TaxPayer taxPayer: taxPayers){
+            if (taxPayer.getSSN() == SSN)
+                return taxPayer.getLandArea() * taxPerSquareMeter;
+        }
+        return -1;
+    }
+
     public void changeTaxPerSquareMeter(double tax){
         this.taxPerSquareMeter = tax;
         totalTaxRefresh();

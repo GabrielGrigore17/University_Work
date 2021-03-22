@@ -10,7 +10,8 @@ public class TaxAppUI {
             "Press 3 to add a lot to a tax payer\n" +
             "Press 4 to remove a lot from a tax payer\n" +
             "Press 5 to get the total tax\n" +
-            "Press 6 to change the tax per square meter";
+            "Press 6 to change the tax per square meter\n" +
+            "Press 7 to get the tax owed by a specific tax payer\n";
     static final String ssnPrompt = "Please enter the Social Security Number:\n";
     static final String addLotPrompt = "Please press 1 for rectangle, 2 for square, 3 for triangle, 4 for circle";
     static final String removeLotPrompt = "Please enter the land ID";
@@ -101,6 +102,15 @@ public class TaxAppUI {
                     double tax = scanner.nextDouble();
                     taxCollector.changeTaxPerSquareMeter(tax);
                     break;
+                }
+                case 7:{
+                    System.out.println(ssnPrompt);
+                    int SSN = scanner.nextInt();
+                    double tax = taxCollector.getTaxOwedByATaxPayer(SSN);
+                    if(tax == -1)
+                        System.out.println("Found no records for " + SSN);
+                    else
+                        System.out.println(tax);
                 }
                 default:{
                     isOn = false;
