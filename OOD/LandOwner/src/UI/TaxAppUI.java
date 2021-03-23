@@ -10,13 +10,12 @@ public class TaxAppUI {
             "Press 3 to add a lot to a tax payer\n" +
             "Press 4 to remove a lot from a tax payer\n" +
             "Press 5 to get the total tax\n" +
-            "Press 6 to change the tax per square meter\n" +
-            "Press 7 to get the tax owed by a specific tax payer\n";
+            "Press 6 to get the tax owed by a specific tax payer\n";
     static final String ssnPrompt = "Please enter the Social Security Number:\n";
+    static final String taxTypePrompt = "Please press 1 for Business and 2 for self employed";
     static final String addLotPrompt = "Please press 1 for rectangle, 2 for square, 3 for triangle, 4 for circle";
     static final String removeLotPrompt = "Please enter the land ID";
     static final String getTotalPrompt = "This is the total amount ";
-    static final String changeTaxPrompt = "Please insert the new tax per square meter";
     static final String rectanglePrompt = "Please enter the height, width, ID separated by a space";
     static final String squarePrompt = "Please enter the side and ID separated by a space";
     static final String trianglePrompt = "Please enter the side, height, ID separated by a space";
@@ -34,7 +33,12 @@ public class TaxAppUI {
                 case 1: {
                     System.out.println(ssnPrompt);
                     int SSN = scanner.nextInt();
-                    taxCollector.addTaxPayer(SSN);
+                    System.out.println(taxTypePrompt);
+                    int secondChoice = scanner.nextInt();
+                    if(secondChoice == 1)
+                        taxCollector.addTaxPayer(SSN, new BusinessTax());
+                    else
+                        taxCollector.addTaxPayer(SSN, new SelfEmployedTax());
                     break;
                 }
                 case 2:{
@@ -98,12 +102,6 @@ public class TaxAppUI {
                     break;
                 }
                 case 6:{
-                    System.out.println(changeTaxPrompt);
-                    double tax = scanner.nextDouble();
-                    taxCollector.changeTaxPerSquareMeter(tax);
-                    break;
-                }
-                case 7:{
                     System.out.println(ssnPrompt);
                     int SSN = scanner.nextInt();
                     double tax = taxCollector.getTaxOwedByATaxPayer(SSN);

@@ -7,15 +7,14 @@ public class TaxCollector {
 
     private final List<TaxPayer> taxPayers = new ArrayList<>();
     private double totalTax;
-    private double taxPerSquareMeter = 0.01;
 
     public void removeTaxPayer(int SSN){
         taxPayers.removeIf(taxPayer -> taxPayer.getSSN() == SSN);
         totalTaxRefresh();
     }
 
-    public void addTaxPayer(int SSN){
-        taxPayers.add(new TaxPayer(SSN));
+    public void addTaxPayer(int SSN, Tax tax){
+        taxPayers.add(new TaxPayer(SSN, tax));
     }
 
     public void addLotToTaxPayer(int SSN, Shape shape){
@@ -34,17 +33,44 @@ public class TaxCollector {
         totalTaxRefresh();
     }
 
+    public void addCarToTaxPayer(int SSN, Car car){
+        for(TaxPayer taxPayer: taxPayers){
+            if(taxPayer.getSSN() == SSN)
+                taxPayer.addCar(car);
+        }
+        totalTaxRefresh();
+    }
+
+    public void removeCarFromTaxPayer(int SSN, int id){
+        for(TaxPayer taxPayer: taxPayers){
+            if(taxPayer.getSSN() == SSN)
+                taxPayer.removeCar(id);
+        }
+        totalTaxRefresh();
+    }
+
     public double getTaxOwedByATaxPayer(int SSN){
         for(TaxPayer taxPayer: taxPayers){
             if (taxPayer.getSSN() == SSN)
-                return taxPayer.getLandArea() * taxPerSquareMeter;
+                return taxPayer.computeTotalTax();
         }
         return -1;
     }
 
-    public void changeTaxPerSquareMeter(double tax){
-        this.taxPerSquareMeter = tax;
-        totalTaxRefresh();
+    public double getLandTaxOwedByATaxPayer(int SSN){
+        for(TaxPayer taxPayer: taxPayers){
+            if (taxPayer.getSSN() == SSN)
+                return taxPayer.computeLandTax();
+        }
+        return -1;
+    }
+
+    public double getCarsTaxOwedByATaxPayer(int SSN){
+        for(TaxPayer taxPayer: taxPayers){
+            if (taxPayer.getSSN() == SSN)
+                return taxPayer.computeCarsTax();
+        }
+        return -1;
     }
 
     public double getTotalTax(){
@@ -54,7 +80,7 @@ public class TaxCollector {
     private void totalTaxRefresh(){
         this.totalTax = 0;
         for(TaxPayer taxPayer: taxPayers)
-            this.totalTax += taxPayer.getLandArea() * taxPerSquareMeter;
+            this.totalTax += taxPayer.computeLandTax();
     }
 
 }

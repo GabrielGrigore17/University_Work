@@ -2,10 +2,13 @@ package Business;
 
 public class TaxPayer {
     private final LandManager landManager = new LandManager();
+    private final CarManager carManager = new CarManager();
     private final int SSN;
+    private final Tax taxType;
 
-    public TaxPayer(int SSN) {
+    public TaxPayer(int SSN, Tax tax) {
         this.SSN = SSN;
+        this.taxType = tax;
     }
 
     public int getSSN() {
@@ -20,8 +23,24 @@ public class TaxPayer {
         landManager.sellLand(id);
     }
 
-    public double getLandArea(){
-        return landManager.getTotalArea();
+    public void addCar(Car car){
+        carManager.addCar(car);
+    }
+
+    public void removeCar(int id){
+        carManager.removeCar(id);
+    }
+
+    public double computeCarsTax(){
+        return carManager.computeTotalTax();
+    }
+
+    public double computeLandTax(){
+        return taxType.computeTaxForTaxPayer(landManager.getTotalArea());
+    }
+
+    public double computeTotalTax(){
+        return carManager.computeTotalTax() + taxType.computeTaxForTaxPayer(landManager.getTotalArea());
     }
 
 
