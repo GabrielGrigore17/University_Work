@@ -15,6 +15,7 @@
 //-----------------------------------------------------------------------------
 #include "Main.h"
 #include "Sprite.h"
+#include <fstream>
 
 //-----------------------------------------------------------------------------
 // Main Class Definitions
@@ -61,6 +62,10 @@ public:
 	void					Explode();
 	bool					AdvanceExplosion();
 	void                    Shoot();
+	void                    RotateRight();
+	void                    RotateLeft();
+	void					SaveGame();
+	void					LoadGame();
 
 private:
 	//-------------------------------------------------------------------------
@@ -76,6 +81,8 @@ private:
 	bool                    m_bullet;
 	AnimatedSprite*			m_pExplosionSprite;
 	int						m_iExplosionFrame;
+	const					BackBuffer* mBackBuffer;
+	DIRECTION				mFacingDirection;
 };
 
 #endif // _CPLAYER_H_

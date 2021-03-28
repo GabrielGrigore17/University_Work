@@ -11,12 +11,15 @@
 // CPlayer Specific Includes
 //-----------------------------------------------------------------------------
 #include "CPlayer.h"
+#include <fstream>
+
 
 //-----------------------------------------------------------------------------
 // Name : CPlayer () (Constructor)
 // Desc : CPlayer Class Constructor
 //-----------------------------------------------------------------------------
-CPlayer::CPlayer(const BackBuffer *pBackBuffer)
+CPlayer::CPlayer(const BackBuffer *pBackBuffer) :mBackBuffer(pBackBuffer)
+, mFacingDirection(DIRECTION::DIR_FORWARD)
 {
 	//m_pSprite = new Sprite("data/planeimg.bmp", "data/planemask.bmp");
 	m_pSprite = new Sprite("data/planeimgandmask.bmp", RGB(0xff,0x00, 0xff));
@@ -207,4 +210,73 @@ void CPlayer::Shoot() {
 	bullet->mVelocity.y = -1000;
 	bullet2->mVelocity.y = -1000;
 	m_bullet = true;
+}
+
+void CPlayer::RotateLeft()
+{
+	auto position = m_pSprite->mPosition;
+	auto velocity = m_pSprite->mVelocity;
+
+	delete m_pSprite;
+
+	switch (mFacingDirection)
+	{
+	case DIRECTION::DIR_FORWARD:
+		m_pSprite = new Sprite("data/leftPlaneImg.bmp", "data/leftPlaneMask.bmp");
+		mFacingDirection = DIRECTION::DIR_LEFT;
+		break;
+	case DIRECTION::DIR_BACKWARD:
+		m_pSprite = new Sprite("data/rightPlaneImg.bmp", "data/rightPlaneMask.bmp");
+		mFacingDirection = DIRECTION::DIR_RIGHT;
+		break;
+	case DIRECTION::DIR_LEFT:
+		mFacingDirection = DIRECTION::DIR_BACKWARD;
+		m_pSprite = new Sprite("data/downPlaneImg.bmp", "data/downPlaneMask.bmp");
+		break;
+	case DIRECTION::DIR_RIGHT:
+		m_pSprite = new Sprite("data/upPlaneImg.bmp", "data/upPlaneMask.bmp");
+		mFacingDirection = DIRECTION::DIR_FORWARD;
+		break;
+	}
+	m_pSprite->mPosition = position;
+	m_pSprite->mVelocity = velocity;
+	m_pSprite->setBackBuffer(mBackBuffer);
+}
+
+void CPlayer::RotateRight()
+{
+	auto position = m_pSprite->mPosition;
+	auto velocity = m_pSprite->mVelocity;
+
+	delete m_pSprite;
+
+	switch (mFacingDirection)
+	{
+	case DIRECTION::DIR_FORWARD:
+		m_pSprite = new Sprite("data/rightPlaneImg.bmp", "data/rightPlaneMask.bmp");
+		mFacingDirection = DIRECTION::DIR_RIGHT;
+		break;
+	case DIRECTION::DIR_BACKWARD:
+		m_pSprite = new Sprite("data/leftPlaneImg.bmp", "data/leftPlaneMask.bmp");
+		mFacingDirection = DIRECTION::DIR_LEFT;
+		break;
+	case DIRECTION::DIR_LEFT:
+		m_pSprite = new Sprite("data/upPlaneImg.bmp", "data/upPlaneMask.bmp");
+		mFacingDirection = DIRECTION::DIR_FORWARD;
+		break;
+	case DIRECTION::DIR_RIGHT:
+		m_pSprite = new Sprite("data/downPlaneImg.bmp", "data/downPlaneMask.bmp");
+		mFacingDirection = DIRECTION::DIR_BACKWARD;
+		break;
+	}
+
+	m_pSprite->mPosition = position;
+	m_pSprite->mVelocity = velocity;
+	m_pSprite->setBackBuffer(mBackBuffer);
+}
+
+void CPlayer::SaveGame()
+{
+	ifstream file;
+
 }

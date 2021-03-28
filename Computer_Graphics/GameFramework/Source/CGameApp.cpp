@@ -10,6 +10,8 @@
 // CGameApp Specific Includes
 //-----------------------------------------------------------------------------
 #include "CGameApp.h"
+#include <fstream>
+#include <WinBase.h>
 
 extern HINSTANCE g_hInst;
 
@@ -269,6 +271,12 @@ LRESULT CGameApp::DisplayWndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM
 				fTimer = SetTimer(m_hWnd, 1, 250, NULL);
 				m_pPlayer2->Explode();
 				break;
+			case 'E':
+				m_pPlayer->RotateLeft();
+				break;
+			case 'R':
+				m_pPlayer->RotateRight();
+				break;
 			}
 			break;
 
@@ -473,4 +481,9 @@ void CGameApp::DrawObjects()
 	m_pPlayer2->Draw();
 
 	m_pBBuffer->present();
+}
+
+void CGameApp::SaveGame()
+{
+
 }
