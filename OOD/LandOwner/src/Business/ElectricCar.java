@@ -1,8 +1,8 @@
 package Business;
 
-public class ElectricCar implements Car{
+public class ElectricCar implements ICar {
     private final int id;
-    private final ElectricCarTax tax = new ElectricCarTax();
+    private double universalTax = 50;
 
     public ElectricCar(int id) {
         this.id = id;
@@ -10,11 +10,15 @@ public class ElectricCar implements Car{
 
     @Override
     public double computeTax() {
-        return tax.computeTaxForTaxPayer(0);
+        return universalTax;
     }
 
     @Override
     public int getID() {
         return id;
+    }
+
+    public void setUniversalTax(double universalTax) {
+        this.universalTax = universalTax;
     }
 }

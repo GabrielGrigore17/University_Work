@@ -5,10 +5,10 @@ import java.util.List;
 
 public class LandManager {
 
-    List<Shape> lands = new ArrayList<>();
+    List<IShape> lands = new ArrayList<>();
 
-    public void buyLand(Shape shape){
-        for (Shape land : lands){
+    public void buyLand(IShape shape){
+        for (IShape land : lands){
             if(shape.getID() == land.getID())
                 return;
         }
@@ -21,7 +21,7 @@ public class LandManager {
 
     public double getTotalArea(){
         double area = 0;
-        for (Shape land : lands){
+        for (IShape land : lands){
             area += land.computeArea();
         }
         return area;

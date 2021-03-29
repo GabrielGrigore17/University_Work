@@ -4,9 +4,9 @@ public class TaxPayer {
     private final LandManager landManager = new LandManager();
     private final CarManager carManager = new CarManager();
     private final int SSN;
-    private final Tax taxType;
+    private final ITax taxType;
 
-    public TaxPayer(int SSN, Tax tax) {
+    public TaxPayer(int SSN, ITax tax) {
         this.SSN = SSN;
         this.taxType = tax;
     }
@@ -15,7 +15,7 @@ public class TaxPayer {
         return SSN;
     }
 
-    public void addLot(Shape shape){
+    public void addLot(IShape shape){
         landManager.buyLand(shape);
     }
 
@@ -23,7 +23,7 @@ public class TaxPayer {
         landManager.sellLand(id);
     }
 
-    public void addCar(Car car){
+    public void addCar(ICar car){
         carManager.addCar(car);
     }
 

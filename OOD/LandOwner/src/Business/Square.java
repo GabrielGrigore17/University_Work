@@ -1,6 +1,6 @@
 package Business;
 
-public class Square implements Shape{
+public class Square implements IShape {
 
     private final double side;
     private final int id;

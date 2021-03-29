@@ -1,13 +1,14 @@
 package Business;
 
-public class GasolineCar implements Car{
+public class InternalCombustionCar implements ICar {
     private final double engine;
     private final int id;
-    private final GasolineCarTax tax = new GasolineCarTax();
+    private final InternalCombustionCarTax tax;
 
-    public GasolineCar(double engine, int id) {
+    public InternalCombustionCar(double engine, int id, String engineType) {
         this.engine = engine;
         this.id = id;
+        this.tax = new InternalCombustionCarTax(engineType);
     }
 
     @Override

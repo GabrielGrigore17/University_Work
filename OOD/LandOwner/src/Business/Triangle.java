@@ -1,6 +1,6 @@
 package Business;
 
-public class Triangle implements Shape{
+public class Triangle implements IShape {
 
     private final double side;
     private final double height;

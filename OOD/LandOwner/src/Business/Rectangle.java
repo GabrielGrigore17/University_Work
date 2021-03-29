@@ -1,6 +1,6 @@
 package Business;
 
-public class Rectangle implements Shape{
+public class Rectangle implements IShape {
 
     private final double height;
     private final double width;

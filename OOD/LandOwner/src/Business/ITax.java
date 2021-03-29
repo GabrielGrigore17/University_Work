@@ -1,5 +1,5 @@
 package Business;
 
-public interface Tax {
+public interface ITax {
     double computeTaxForTaxPayer(double metric);
 }

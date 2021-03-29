@@ -5,10 +5,10 @@ import java.util.List;
 
 public class CarManager {
 
-    List<Car> cars = new ArrayList<>();
+    List<ICar> cars = new ArrayList<>();
 
-    public void addCar(Car carToAdd){
-        for (Car car : cars){
+    public void addCar(ICar carToAdd){
+        for (ICar car : cars){
             if(car.getID() == carToAdd.getID())
                 return;
         }
@@ -21,7 +21,7 @@ public class CarManager {
 
     public double computeTotalTax(){
         double tax = 0;
-        for (Car car : cars){
+        for (ICar car : cars){
             tax += car.computeTax();
         }
         return tax;

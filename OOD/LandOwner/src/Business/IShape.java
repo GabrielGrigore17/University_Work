@@ -1,6 +1,6 @@
 package Business;
 
-public interface Shape {
+public interface IShape {
 
     double computeArea();
     int getID();

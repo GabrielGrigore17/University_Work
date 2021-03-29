@@ -13,11 +13,11 @@ public class TaxCollector {
         totalTaxRefresh();
     }
 
-    public void addTaxPayer(int SSN, Tax tax){
+    public void addTaxPayer(int SSN, ITax tax){
         taxPayers.add(new TaxPayer(SSN, tax));
     }
 
-    public void addLotToTaxPayer(int SSN, Shape shape){
+    public void addLotToTaxPayer(int SSN, IShape shape){
         for(TaxPayer taxPayer: taxPayers){
             if(taxPayer.getSSN() == SSN)
                 taxPayer.addLot(shape);
@@ -33,7 +33,7 @@ public class TaxCollector {
         totalTaxRefresh();
     }
 
-    public void addCarToTaxPayer(int SSN, Car car){
+    public void addCarToTaxPayer(int SSN, ICar car){
         for(TaxPayer taxPayer: taxPayers){
             if(taxPayer.getSSN() == SSN)
                 taxPayer.addCar(car);

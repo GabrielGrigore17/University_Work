@@ -1,6 +1,6 @@
 package Business;
 
-public interface Car {
+public interface ICar {
     double computeTax();
     int getID();
 }

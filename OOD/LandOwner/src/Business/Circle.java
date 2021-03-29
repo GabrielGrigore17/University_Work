@@ -1,6 +1,6 @@
 package Business;
 
-public class Circle implements Shape{
+public class Circle implements IShape {
 
     private final double radix;
     private final int id;
