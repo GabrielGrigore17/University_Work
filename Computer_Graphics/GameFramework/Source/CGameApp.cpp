@@ -404,36 +404,165 @@ void CGameApp::ProcessInput( )
 	// Check the relevant keys
 	if (pKeyBuffer[VK_UP] & 0xF0) {
 		Direction |= CPlayer::DIR_FORWARD;
-		m_pPlayer->Move(Direction);
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		double a = x_axis - x_axis2;
+		double b = y_axis - y_axis2;
+		double distance = std::sqrt(a * a + b * b);
+		if (distance < 100) {
+			m_pPlayer->SetPositionY(y_axis + 5);
+			m_pPlayer->Stop();
+		}
+		else
+			m_pPlayer->Move(Direction);
 	}
 	if (pKeyBuffer[VK_DOWN] & 0xF0) {
 		Direction |= CPlayer::DIR_BACKWARD;
-		m_pPlayer->Move(Direction);
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		double a = x_axis - x_axis2;
+		double b = y_axis - y_axis2;
+		double distance = std::sqrt(a * a + b * b);
+		if (distance < 100) {
+			m_pPlayer->SetPositionY(y_axis - 5);
+			m_pPlayer->Stop();
+		}
+		else
+			m_pPlayer->Move(Direction);
 	}
 	if (pKeyBuffer[VK_LEFT] & 0xF0) {
 		Direction |= CPlayer::DIR_LEFT;
-		m_pPlayer->Move(Direction);
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		double a = x_axis - x_axis2;
+		double b = y_axis - y_axis2;
+		double distance = std::sqrt(a * a + b * b);
+		if (distance < 100) {
+			m_pPlayer->Stop();
+			m_pPlayer->SetPositionX(x_axis + 5);
+		}
+		else
+			m_pPlayer->Move(Direction);
 	}
 	if (pKeyBuffer[VK_RIGHT] & 0xF0) {
 		Direction |= CPlayer::DIR_RIGHT;
-		m_pPlayer->Move(Direction);
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		double a = x_axis - x_axis2;
+		double b = y_axis - y_axis2;
+		double distance = std::sqrt(a * a + b * b);
+		if (distance < 100) {
+			m_pPlayer->SetPositionX(x_axis - 5);
+			m_pPlayer->Stop();
+		}
+		else
+			m_pPlayer->Move(Direction);
 	}
 
 	if (pKeyBuffer[0x57] & 0xF0) {
 		Direction |= CPlayer2::DIR_FORWARD;
-		m_pPlayer2->Move(Direction);
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		double a = x_axis - x_axis2;
+		double b = y_axis - y_axis2;
+		double distance = std::sqrt(a * a + b * b);
+		if (distance < 100) {
+			m_pPlayer2->SetPositionY(y_axis2 + 5);
+			m_pPlayer2->Stop();
+		}
+		else
+			m_pPlayer2->Move(Direction);
 	}
 	if (pKeyBuffer[0x53] & 0xF0) {
 		Direction |= CPlayer2::DIR_BACKWARD;
-		m_pPlayer2->Move(Direction);
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		double a = x_axis - x_axis2;
+		double b = y_axis - y_axis2;
+		double distance = std::sqrt(a * a + b * b);
+		if (distance < 100) {
+			m_pPlayer2->SetPositionY(y_axis2 - 5);
+			m_pPlayer2->Stop();
+		}
+		else
+			m_pPlayer2->Move(Direction);
 	}
 	if (pKeyBuffer[0x41] & 0xF0) {
 		Direction |= CPlayer2::DIR_LEFT;
-		m_pPlayer2->Move(Direction);
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		double a = x_axis - x_axis2;
+		double b = y_axis - y_axis2;
+		double distance = std::sqrt(a * a + b * b);
+		if (distance < 100) {
+			m_pPlayer2->Stop();
+			m_pPlayer2->SetPositionX(x_axis2 + 5);
+		}
+		else
+			m_pPlayer2->Move(Direction);
 	}
 	if (pKeyBuffer[0x44] & 0xF0) {
 		Direction |= CPlayer2::DIR_RIGHT;
-		m_pPlayer2->Move(Direction);
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		double a = x_axis - x_axis2;
+		double b = y_axis - y_axis2;
+		double distance = std::sqrt(a * a + b * b);
+		if (distance < 100) {
+			m_pPlayer2->SetPositionX(x_axis2 - 5);
+			m_pPlayer2->Stop();
+		}
+		else
+			m_pPlayer2->Move(Direction);;
+	}
+	
+	if (pKeyBuffer[0x4D] & 0xF0)
+	{
+		std::ofstream output;
+		output.open("Save.txt");
+		double x_axis, y_axis, x_axis2, y_axis2;
+		m_pPlayer->GetPositionX(x_axis);
+		m_pPlayer->GetPositionY(y_axis);
+		m_pPlayer2->GetPositionX(x_axis2);
+		m_pPlayer2->GetPositionY(y_axis2);
+		output << x_axis << " " << y_axis;
+		output << x_axis2 << " " << y_axis2;
+		output.close();
+	}
+
+	if (pKeyBuffer[0x4C] & 0xF0)
+	{
+		std::ifstream input;
+		input.open("Save.txt");
+		double x_axis, y_axis, x_axis2, y_axis2;
+		input >> x_axis >> y_axis >> x_axis2 >> y_axis2;
+		m_pPlayer->Position() = Vec2(x_axis, y_axis);
+		m_pPlayer2->Position() = Vec2(x_axis2, y_axis2);
+		input.close();
 	}
 
 	
@@ -483,7 +612,3 @@ void CGameApp::DrawObjects()
 	m_pBBuffer->present();
 }
 
-void CGameApp::SaveGame()
-{
-
-}

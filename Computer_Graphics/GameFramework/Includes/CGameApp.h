@@ -61,8 +61,7 @@ private:
 	void		AnimateObjects	( );
 	void		DrawObjects	   ( );
 	void		ProcessInput	  ( );
-	void SaveGame();
-	void LoadGame();
+
 	
 	//-------------------------------------------------------------------------
 	// Private Static Functions For This Class

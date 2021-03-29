@@ -156,6 +156,35 @@ void CPlayer2::Move(ULONG ulDirection)
 
 }
 
+void CPlayer2::GetPositionY(double& y)
+{
+	y = m_pSprite->mPosition.y;
+}
+
+void CPlayer2::GetPositionX(double& x)
+{
+	x = m_pSprite->mPosition.x;
+}
+
+int CPlayer2::getWidth()
+{
+	return m_pSprite->width();
+}
+
+void CPlayer2::SetPositionY(double y)
+{
+	m_pSprite->mPosition.y = y;
+}
+
+void CPlayer2::SetPositionX(double x)
+{
+	m_pSprite->mPosition.x = x;
+}
+
+void CPlayer2::Stop()
+{
+	m_pSprite->mVelocity = Vec2(0, 0);
+}
 
 Vec2& CPlayer2::Position()
 {

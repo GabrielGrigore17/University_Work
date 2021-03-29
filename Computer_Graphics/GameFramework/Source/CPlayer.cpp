@@ -165,6 +165,36 @@ Vec2& CPlayer::Position()
 	return m_pSprite->mPosition;
 }
 
+void CPlayer::GetPositionY(double& y)
+{
+	y = m_pSprite->mPosition.y;
+}
+
+void CPlayer::GetPositionX(double& x)
+{
+	x = m_pSprite->mPosition.x;
+}
+
+void CPlayer::SetPositionY(double y)
+{
+	m_pSprite->mPosition.y = y;
+}
+
+void CPlayer::SetPositionX(double x)
+{
+	m_pSprite->mPosition.x = x;
+}
+
+int CPlayer::getWidth()
+{
+	return m_pSprite->width();
+}
+
+void CPlayer::Stop()
+{
+	m_pSprite->mVelocity = Vec2(0, 0);
+}
+
 Vec2& CPlayer::Velocity()
 {
 	return m_pSprite->mVelocity;
@@ -273,10 +303,4 @@ void CPlayer::RotateRight()
 	m_pSprite->mPosition = position;
 	m_pSprite->mVelocity = velocity;
 	m_pSprite->setBackBuffer(mBackBuffer);
-}
-
-void CPlayer::SaveGame()
-{
-	ifstream file;
-
 }

@@ -64,8 +64,12 @@ public:
 	void                    Shoot();
 	void                    RotateRight();
 	void                    RotateLeft();
-	void					SaveGame();
-	void					LoadGame();
+	void					GetPositionY(double& y);
+	void					GetPositionX(double& x);
+	void					SetPositionY(double y);
+	void					SetPositionX(double x);
+	int						getWidth();
+	void					Stop();
 
 private:
 	//-------------------------------------------------------------------------

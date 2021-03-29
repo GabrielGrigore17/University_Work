@@ -61,6 +61,13 @@ public:
 	void					Explode();
 	bool					AdvanceExplosion();
 	void                    Shoot();
+	void					GetPositionY(double& y);
+	void					GetPositionX(double& x);
+	int						getWidth();
+	void					SetPositionY(double y);
+	void					SetPositionX(double x);
+	void					Stop();
+
 
 private:
 	//-------------------------------------------------------------------------
