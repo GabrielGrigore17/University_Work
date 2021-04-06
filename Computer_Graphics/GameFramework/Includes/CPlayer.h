@@ -70,6 +70,8 @@ public:
 	void					SetPositionX(double x);
 	int						getWidth();
 	void					Stop();
+	Vec2& PositionBullet();
+	int getWidthBullet();
 
 private:
 	//-------------------------------------------------------------------------

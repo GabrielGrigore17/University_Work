@@ -304,3 +304,13 @@ void CPlayer::RotateRight()
 	m_pSprite->mVelocity = velocity;
 	m_pSprite->setBackBuffer(mBackBuffer);
 }
+
+Vec2& CPlayer::PositionBullet()
+{
+	return bullet->mPosition;
+}
+
+int CPlayer::getWidthBullet()
+{
+	return 20;
+}

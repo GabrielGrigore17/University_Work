@@ -31,6 +31,8 @@ CGameApp::CGameApp()
 	m_pBBuffer		= NULL;
 	m_pPlayer		= NULL;
 	m_pPlayer2		= NULL;
+	m_cCrate = NULL;
+	m_cCrate1 = NULL;
 
 	m_LastFrameRate = 0;
 }
@@ -286,7 +288,14 @@ LRESULT CGameApp::DisplayWndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM
 			case 1:
 				if(!m_pPlayer->AdvanceExplosion()|| !m_pPlayer2->AdvanceExplosion())
 					KillTimer(m_hWnd, 1);
+			case 3:
+				if (!m_cCrate->AdvanceExplosion())
+					KillTimer(m_hWnd, 3);
+			case 4:
+				if (!m_cCrate1->AdvanceExplosion())
+					KillTimer(m_hWnd, 4);
 			}
+
 			break;
 
 		case WM_COMMAND:
@@ -309,6 +318,8 @@ bool CGameApp::BuildObjects()
 	m_pBBuffer = new BackBuffer(m_hWnd, m_nViewWidth, m_nViewHeight);
 	m_pPlayer = new CPlayer(m_pBBuffer);
 	m_pPlayer2 = new CPlayer2(m_pBBuffer);
+	m_cCrate = new Crate(m_pBBuffer);
+	m_cCrate1 = new Crate(m_pBBuffer);
 
 	if(!m_imgBackground.LoadBitmapFromFile("data/background.bmp", GetDC(m_hWnd)))
 		return false;
@@ -325,6 +336,8 @@ void CGameApp::SetupGameState()
 {
 	m_pPlayer->Position() = Vec2(100, 400);
 	m_pPlayer2->Position() = Vec2(300, 400);
+	m_cCrate->Position() = Vec2(200, 50);
+	m_cCrate1->Position() = Vec2(270, 50);
 }
 
 //-----------------------------------------------------------------------------
@@ -351,6 +364,17 @@ void CGameApp::ReleaseObjects( )
 		delete m_pBBuffer;
 		m_pBBuffer = NULL;
 	}
+	if (m_cCrate != NULL)
+	{
+		delete m_pPlayer2;
+		m_pPlayer2 = NULL;
+	}
+
+	if (m_cCrate1 != NULL)
+	{
+		delete m_pPlayer2;
+		m_pPlayer2 = NULL;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -372,8 +396,8 @@ void CGameApp::FrameAdvance()
 	if ( m_LastFrameRate != m_Timer.GetFrameRate() )
 	{
 		m_LastFrameRate = m_Timer.GetFrameRate( FrameRate, 50 );
-		sprintf_s( TitleBuffer, _T("Game : %s"), FrameRate );
-		SetWindowText( m_hWnd, TitleBuffer );
+		sprintf_s(TitleBuffer, _T("Game : %s  Lives: %d  Score: %d"), FrameRate, lives, score);
+		SetWindowText(m_hWnd, TitleBuffer);
 
 	} // End if Frame Rate Altered
 
@@ -385,6 +409,13 @@ void CGameApp::FrameAdvance()
 
 	// Drawing the game objects
 	DrawObjects();
+
+
+	if (checkCollisionC() == true)
+		lives--;
+
+	if (checkCollisionCB() == true)
+		score++;
 }
 
 //-----------------------------------------------------------------------------
@@ -565,6 +596,9 @@ void CGameApp::ProcessInput( )
 		input.close();
 	}
 
+	m_cCrate->Move();
+	m_cCrate1->Move();
+
 	
 	// Move the player
 	//m_pPlayer->Move(Direction);
@@ -594,6 +628,8 @@ void CGameApp::AnimateObjects()
 {
 	m_pPlayer->Update(m_Timer.GetTimeElapsed());
 	m_pPlayer2->Update(m_Timer.GetTimeElapsed());
+	m_cCrate->Update(m_Timer.GetTimeElapsed());
+	m_cCrate1->Update(m_Timer.GetTimeElapsed());
 }
 
 //-----------------------------------------------------------------------------
@@ -608,7 +644,60 @@ void CGameApp::DrawObjects()
 
 	m_pPlayer->Draw();
 	m_pPlayer2->Draw();
+	m_cCrate->Draw();
+	m_cCrate1->Draw();
 
 	m_pBBuffer->present();
+}
+
+
+bool CGameApp::checkCollisionC()
+{
+	static UINT fTimer;
+	double distance = m_pPlayer->Position().Distance(m_cCrate->Position());
+	if (distance <= (m_pPlayer->getWidth() + m_cCrate->getWidth()) / 2 && !m_cCrate->ifExploded())
+	{
+		fTimer = SetTimer(m_hWnd, 1, 250, NULL);
+		m_cCrate->Explode();
+		fTimer = SetTimer(m_hWnd, 2, 250, NULL);
+		m_pPlayer->Explode();
+		return true;
+	}
+
+
+	distance = m_pPlayer->Position().Distance(m_cCrate1->Position());
+	if (distance <= (m_pPlayer->getWidth() + m_cCrate1->getWidth()) / 2 && !m_cCrate1->ifExploded())
+	{
+		fTimer = SetTimer(m_hWnd, 1, 250, NULL);
+		m_cCrate1->Explode();
+		fTimer = SetTimer(m_hWnd, 2, 250, NULL);
+		m_pPlayer->Explode();
+		return true;
+
+	}
+	return false;
+}
+
+bool CGameApp::checkCollisionCB()
+{
+	static UINT fTimer;
+	double distance = m_pPlayer->PositionBullet().Distance(m_cCrate->Position());
+	if (distance <= (m_pPlayer->getWidthBullet() + m_cCrate->getWidth()) / 2 && !m_cCrate->ifExploded())
+	{
+		fTimer = SetTimer(m_hWnd, 1, 250, NULL);
+		m_cCrate->Explode();
+		return true;
+	}
+
+
+	distance = m_pPlayer->PositionBullet().Distance(m_cCrate1->Position());
+	if (distance <= (m_pPlayer->getWidthBullet() + m_cCrate1->getWidth()) / 2 && !m_cCrate1->ifExploded())
+	{
+		fTimer = SetTimer(m_hWnd, 2, 250, NULL);
+		m_cCrate1->Explode();
+
+		return true;
+	}
+	return false;
 }
 

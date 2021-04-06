@@ -16,6 +16,7 @@
 #include "CTimer.h"
 #include "CPlayer.h"
 #include "CPlayer2.h"
+#include "Crate.h"
 #include "BackBuffer.h"
 #include "ImageFile.h"
 
@@ -61,6 +62,8 @@ private:
 	void		AnimateObjects	( );
 	void		DrawObjects	   ( );
 	void		ProcessInput	  ( );
+	bool		checkCollisionC();
+	bool		checkCollisionCB();
 
 	
 	//-------------------------------------------------------------------------
@@ -93,6 +96,12 @@ private:
 	BackBuffer*				m_pBBuffer;
 	CPlayer*				m_pPlayer;
 	CPlayer2*				m_pPlayer2;
+
+	Crate* m_cCrate;
+	Crate* m_cCrate1;
+	Crate* m_cCrate2;
+	int lives = 10;
+	int score = 0;
 };
 
 #endif // _CGAMEAPP_H_

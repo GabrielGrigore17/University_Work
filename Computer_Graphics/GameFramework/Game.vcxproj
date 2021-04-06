@@ -151,6 +151,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Crate.cpp" />
     <ClCompile Include="Source\BackBuffer.cpp" />
     <ClCompile Include="Source\CGameApp.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -179,6 +180,7 @@
     <ClInclude Include="Includes\CGameApp.h" />
     <ClInclude Include="Includes\CPlayer.h" />
     <ClInclude Include="Includes\CPlayer2.h" />
+    <ClInclude Include="Includes\Crate.h" />
     <ClInclude Include="Includes\CTimer.h" />
     <ClInclude Include="Includes\Filters.h" />
     <ClInclude Include="Includes\ImageFile.h" />
