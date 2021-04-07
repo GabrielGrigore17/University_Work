@@ -5,4 +5,4 @@ For now I only have four classes here:
 - Object Oriented Programming (Python and C++ via Visual Studio Code)
 - Object Oriented Design (Java via Eclipse/InteliJ Idea)
 - Computer Graphics (C++ via Visual Studio)
-- Artificial Inteligence (Prolog and Python via PyCharm)
+- Artificial Intelligence (Prolog and Python via PyCharm)
