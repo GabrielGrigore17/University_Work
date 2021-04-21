@@ -12,4 +12,4 @@ class EightPuzzleMht(EightPuzzle):
     def h(self, node):
         """ implement Manhattan distance. Hint! Look at
         Missplaced Tiles heuristic function above """
-        return mhtDis;
+        return sum(abs(s // 3 - g // 3) + abs(s % 3 - g % 3) for (s, g) in zip(node.state, self.goal));
