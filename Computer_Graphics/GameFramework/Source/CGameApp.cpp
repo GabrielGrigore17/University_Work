@@ -12,6 +12,11 @@
 #include "CGameApp.h"
 #include <fstream>
 #include <WinBase.h>
+#include <iostream>
+#include <list>
+#include <iterator>
+#include <algorithm>
+#include <ctime>
 
 extern HINSTANCE g_hInst;
 
@@ -33,6 +38,8 @@ CGameApp::CGameApp()
 	m_pPlayer2		= NULL;
 	m_cCrate = NULL;
 	m_cCrate1 = NULL;
+	m_pEnemy = NULL;
+	m_pHeart = NULL;
 
 	m_LastFrameRate = 0;
 }
@@ -294,6 +301,12 @@ LRESULT CGameApp::DisplayWndProc( HWND hWnd, UINT Message, WPARAM wParam, LPARAM
 			case 4:
 				if (!m_cCrate1->AdvanceExplosion())
 					KillTimer(m_hWnd, 4);
+			case 5:
+				if (!m_pEnemy->AdvanceExplosion())
+					KillTimer(m_hWnd, 5);
+			case 6:
+				if (!m_pHeart->AdvanceExplosion())
+					KillTimer(m_hWnd, 6);
 			}
 
 			break;
@@ -320,8 +333,10 @@ bool CGameApp::BuildObjects()
 	m_pPlayer2 = new CPlayer2(m_pBBuffer);
 	m_cCrate = new Crate(m_pBBuffer);
 	m_cCrate1 = new Crate(m_pBBuffer);
+	m_pEnemy = new Enemy(m_pBBuffer);
+	m_pHeart = new Lives(m_pBBuffer);
 
-	if(!m_imgBackground.LoadBitmapFromFile("data/background.bmp", GetDC(m_hWnd)))
+	if(!m_imgBackground.LoadBitmapFromFile("data/background2.bmp", GetDC(m_hWnd)))
 		return false;
 
 	// Success!
@@ -338,6 +353,8 @@ void CGameApp::SetupGameState()
 	m_pPlayer2->Position() = Vec2(300, 400);
 	m_cCrate->Position() = Vec2(200, 50);
 	m_cCrate1->Position() = Vec2(270, 50);
+	m_pEnemy->Position() = Vec2(300, 200);
+	m_pHeart->Position() = Vec2(400, 200);
 }
 
 //-----------------------------------------------------------------------------
@@ -374,6 +391,17 @@ void CGameApp::ReleaseObjects( )
 	{
 		delete m_pPlayer2;
 		m_pPlayer2 = NULL;
+	}
+	if (m_pEnemy != NULL)
+	{
+		delete m_pEnemy;
+		m_pEnemy = NULL;
+	}
+
+	if (m_pHeart != NULL)
+	{
+		delete m_pHeart;
+		m_pHeart = NULL;
 	}
 }
 
@@ -416,6 +444,24 @@ void CGameApp::FrameAdvance()
 
 	if (checkCollisionCB() == true)
 		score++;
+
+	if (checkCollisionPBE() == true)
+	{
+		score++;
+	}
+
+	if (checkCollisionEBP() == true)
+	{
+		lives--;
+
+	}
+
+
+	if (checkCollisionL() == true)
+	{
+		lives++;
+
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -426,6 +472,11 @@ void CGameApp::ProcessInput( )
 {
 	static UCHAR pKeyBuffer[ 256 ];
 	ULONG		Direction = 0;
+	ULONG		Direction_2 = 0;
+	ULONG       Direction3 = 0;
+	ULONG       Direction4 = 0;
+	ULONG       Direction5 = 0;
+	ULONG       Direction6 = 0;
 	POINT		CursorPos;
 	float		X = 0.0f, Y = 0.0f;
 
@@ -570,6 +621,40 @@ void CGameApp::ProcessInput( )
 		else
 			m_pPlayer2->Move(Direction);;
 	}
+
+	srand((unsigned)time(0));
+	printf("Your dice has been rolled! You got: \n ");
+	int result = 1 + (rand() % 4);
+
+	switch (result) {
+	case 1:
+		Direction3 |= Enemy::DIR_FORWARD;
+		Direction4 |= Crate::DIR_LEFT;
+		Direction5 |= Crate::DIR_BACKWARD;
+		Direction6 |= Lives::DIR_FORWARD;
+		break;
+	case 2:
+		Direction3 |= Enemy::DIR_BACKWARD;
+		Direction4 |= Crate::DIR_FORWARD;
+		Direction5 |= Crate::DIR_RIGHT;
+		Direction6 |= Lives::DIR_RIGHT;
+		m_pEnemy->Shoot();
+		break;
+	case 3:
+		Direction3 |= Enemy::DIR_LEFT;
+		Direction4 |= Crate::DIR_RIGHT;
+		Direction5 |= Crate::DIR_LEFT;
+		Direction6 |= Lives::DIR_BACKWARD;
+
+		break;
+	case 4:
+		Direction3 |= Enemy::DIR_RIGHT;
+		Direction4 |= Crate::DIR_BACKWARD;
+		Direction5 |= Crate::DIR_FORWARD;
+		Direction6 |= Lives::DIR_LEFT;
+		//m_pEnemy->Shoot();
+		break;
+	}
 	
 	if (pKeyBuffer[0x4D] & 0xF0)
 	{
@@ -598,6 +683,8 @@ void CGameApp::ProcessInput( )
 
 	m_cCrate->Move();
 	m_cCrate1->Move();
+	m_pEnemy->Move(Direction3);
+	m_pHeart->Move(Direction6);
 
 	
 	// Move the player
@@ -630,6 +717,8 @@ void CGameApp::AnimateObjects()
 	m_pPlayer2->Update(m_Timer.GetTimeElapsed());
 	m_cCrate->Update(m_Timer.GetTimeElapsed());
 	m_cCrate1->Update(m_Timer.GetTimeElapsed());
+	m_pEnemy->Update(m_Timer.GetTimeElapsed());
+	m_pHeart->Update(m_Timer.GetTimeElapsed());
 }
 
 //-----------------------------------------------------------------------------
@@ -639,13 +728,17 @@ void CGameApp::AnimateObjects()
 void CGameApp::DrawObjects()
 {
 	m_pBBuffer->reset();
-
-	m_imgBackground.Paint(m_pBBuffer->getDC(), 0, 0);
+	m_imgBackground.Paint(m_pBBuffer->getDC(), 0, y - 600);
+	y = y + 2;
+	if (y == 600)
+		y = -120;
 
 	m_pPlayer->Draw();
 	m_pPlayer2->Draw();
 	m_cCrate->Draw();
 	m_cCrate1->Draw();
+	m_pEnemy->Draw();
+	m_pHeart->Draw();
 
 	m_pBBuffer->present();
 }
@@ -698,6 +791,61 @@ bool CGameApp::checkCollisionCB()
 
 		return true;
 	}
+	return false;
+}
+
+bool CGameApp::checkCollisionPBE()
+{
+	static UINT fTimer;
+	double distance = m_pPlayer->PositionBullet().Distance(m_pEnemy->Position());
+	if (distance <= (m_pPlayer->getWidthBullet() + m_pEnemy->getWidth()) / 2 && !m_pEnemy->ifExploded())
+	{
+		fTimer = SetTimer(m_hWnd, 1, 250, NULL);
+		m_pEnemy->Explode();
+		return true;
+	}
+
+
+	return false;
+}
+
+bool CGameApp::checkCollisionEBP()
+{
+	static UINT fTimer;
+	double distance = m_pEnemy->Position().Distance(m_pPlayer->Position());
+	if (distance <= (m_pEnemy->getWidth() + m_pPlayer->getWidth()) / 2 && !m_pPlayer->ifExploded())
+	{
+		fTimer = SetTimer(m_hWnd, 1, 250, NULL);
+		m_pPlayer->Explode();
+		return true;
+	}
+
+
+	distance = m_pEnemy->PositionBullet().Distance(m_pPlayer->Position());
+	if (distance <= (m_pEnemy->getWidthBullet() + m_pPlayer->getWidth()) / 2 && !m_pPlayer->ifExploded())
+	{
+		fTimer = SetTimer(m_hWnd, 1, 250, NULL);
+		m_pPlayer->Explode();
+		return true;
+	}
+
+	return false;
+}
+
+
+bool CGameApp::checkCollisionL()
+{
+	static UINT fTimer;
+	double distance = m_pPlayer->Position().Distance(m_pHeart->Position());
+	if (distance <= (m_pPlayer->getWidth() + m_pHeart->getWidth()) / 2 && !m_pHeart->ifExploded())
+	{
+		fTimer = SetTimer(m_hWnd, 1000, 250, NULL);
+		m_pHeart->Explode();
+
+		return true;
+	}
+
+
 	return false;
 }
 

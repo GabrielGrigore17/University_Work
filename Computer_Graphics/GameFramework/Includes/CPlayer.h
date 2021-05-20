@@ -72,6 +72,7 @@ public:
 	void					Stop();
 	Vec2& PositionBullet();
 	int getWidthBullet();
+	bool ifExploded();
 
 private:
 	//-------------------------------------------------------------------------

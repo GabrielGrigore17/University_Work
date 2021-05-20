@@ -314,3 +314,8 @@ int CPlayer::getWidthBullet()
 {
 	return 20;
 }
+
+bool CPlayer::ifExploded()
+{
+	return m_bExplosion;
+}

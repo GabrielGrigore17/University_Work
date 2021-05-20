@@ -152,6 +152,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Crate.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Lives.cpp" />
     <ClCompile Include="Source\BackBuffer.cpp" />
     <ClCompile Include="Source\CGameApp.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -182,8 +184,10 @@
     <ClInclude Include="Includes\CPlayer2.h" />
     <ClInclude Include="Includes\Crate.h" />
     <ClInclude Include="Includes\CTimer.h" />
+    <ClInclude Include="Includes\Enemy.h" />
     <ClInclude Include="Includes\Filters.h" />
     <ClInclude Include="Includes\ImageFile.h" />
+    <ClInclude Include="Includes\Lives.h" />
     <ClInclude Include="Includes\Main.h" />
     <ClInclude Include="Includes\ResizeEngine.h" />
     <ClInclude Include="Includes\Sprite.h" />

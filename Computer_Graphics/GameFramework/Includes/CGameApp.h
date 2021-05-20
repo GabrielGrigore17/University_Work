@@ -17,6 +17,8 @@
 #include "CPlayer.h"
 #include "CPlayer2.h"
 #include "Crate.h"
+#include "Enemy.h"
+#include "Lives.h"
 #include "BackBuffer.h"
 #include "ImageFile.h"
 
@@ -64,6 +66,9 @@ private:
 	void		ProcessInput	  ( );
 	bool		checkCollisionC();
 	bool		checkCollisionCB();
+	bool        checkCollisionPBE();
+	bool        checkCollisionEBP();
+	bool        checkCollisionL();
 
 	
 	//-------------------------------------------------------------------------
@@ -100,8 +105,11 @@ private:
 	Crate* m_cCrate;
 	Crate* m_cCrate1;
 	Crate* m_cCrate2;
-	int lives = 10;
+	Lives* m_pHeart;
+	Enemy* m_pEnemy;
+	int lives = 3;
 	int score = 0;
+	int y = -600;
 };
 
 #endif // _CGAMEAPP_H_
