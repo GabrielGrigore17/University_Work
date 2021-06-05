@@ -1,84 +1,101 @@
+import json
 import networkx as nx
 import copy as cp
 
 
-def k_shortest_paths(G, source, target, k=1, weight='weight'):
-    # G is a networkx graph.
-    # source and target are the labels for the source and target of the path.
-    # k is the amount of desired paths.
-    # weight = 'weight' assumes a weighed graph. If this is undesired, use weight = None.
+class RouteGenerator(nx.Graph):
 
-    A = [nx.dijkstra_path(G, source, target, weight='weight')]
-    A_len = [sum([G[A[0][l]][A[0][l + 1]]['weight'] for l in range(len(A[0]) - 1)])]
+    def __init__(self):
+        nx.Graph.__init__(self)
 
-    time_sum = 0
-    for i in range((len(A[0]) - 1)//2):
-        time_sum += max(G[A[0][i]][A[0][i + 1]]['weight'],
-                        G[A[0][len(A[0]) - i - 1]][A[0][len(A[0]) - i - 2]]['weight'])
-    if (len(A[0]) - 1) % 2 == 1:
-        time_sum += G[A[0][(len(A[0]) - 1) % 2]][A[0][(len(A[0]) - 1) % 2 + 1]]['weight'] / 2
+    def k_shortest_paths(self, source, target, k=1, weight='weight'):
+        # G is a networkx graph.
+        # source and target are the labels for the source and target of the path.
+        # k is the amount of desired paths.
+        # weight = 'weight' assumes a weighed graph. If this is undesired, use weight = None.
 
-    A_time = [time_sum]
+        path_list = [nx.dijkstra_path(self, source, target, weight='weight')]
+        path_length_list = [sum([self[path_list[0][i]][path_list[0][i + 1]]['weight']
+                                 for i in range(len(path_list[0]) - 1)])]
 
-    max_time = time_sum
+        time_sum = 0
+        for i in range((len(path_list[0]) - 1) // 2):
+            time_sum += max(self[path_list[0][i]][path_list[0][i + 1]]['weight'],
+                            self[path_list[0][len(path_list[0]) - i - 1]]
+                            [path_list[0][len(path_list[0]) - i - 2]]['weight'])
+        if (len(path_list[0]) - 1) % 2 == 1:
+            time_sum += \
+                self[path_list[0][(len(path_list[0]) - 1) % 2]][path_list[0][(len(path_list[0]) - 1) % 2 + 1]]['weight'] / 2
 
-    B = []
+        path_time_list = [time_sum]
 
-    for i in range(1, k):
-        for j in range(0, len(A[-1]) - 1):
-            Gcopy = cp.deepcopy(G)
-            spur_node = A[-1][j]
-            rootpath = A[-1][:j + 1]
-            for path in A:
-                if rootpath == path[0:j + 1]:  # and len(path) > j?
-                    if Gcopy.has_edge(path[j], path[j + 1]):
-                        Gcopy.remove_edge(path[j], path[j + 1])
-                    if Gcopy.has_edge(path[j + 1], path[j]):
-                        Gcopy.remove_edge(path[j + 1], path[j])
-            for n in rootpath:
-                if n != spur_node:
-                    Gcopy.remove_node(n)
-            try:
-                spurpath = nx.dijkstra_path(Gcopy, spur_node, target, weight='weight')
-                totalpath = rootpath + spurpath[1:]
-                if totalpath not in B:
-                    B += [totalpath]
-            except nx.NetworkXNoPath:
-                continue
-        if len(B) == 0:
-            break
-        lenB = [sum([G[path[l]][path[l + 1]]['weight'] for l in range(len(path) - 1)]) for path in B]
-        B = [p for _, p in sorted(zip(lenB, B))]
+        path_list_buffer = []
 
-        for path in B:
-            time_sum = 0
-            for i in range((len(path) - 1)//2):
-                time_sum += max(G[path[i]][path[i + 1]]['weight'],
-                                G[path[len(path) - i - 1]][path[len(path) - i - 2]]['weight'])
-            if (len(path) - 1) % 2 == 1:
-                time_sum += G[path[(len(path) - 1) % 2]][path[(len(path) - 1) % 2 + 1]]['weight'] / 2
-            A_time.append(time_sum)
+        for iterator in range(1, k):
+            for j in range(0, len(path_list[-1]) - 1):
+                graph_copy = cp.deepcopy(self)
+                spur_node = path_list[-1][j]
+                root_path = path_list[-1][:j + 1]
+                for path in path_list:
+                    if root_path == path[0:j + 1]:  # and len(path) > j?
+                        if graph_copy.has_edge(path[j], path[j + 1]):
+                            graph_copy.remove_edge(path[j], path[j + 1])
+                        if graph_copy.has_edge(path[j + 1], path[j]):
+                            graph_copy.remove_edge(path[j + 1], path[j])
+                for n in root_path:
+                    if n != spur_node:
+                        graph_copy.remove_node(n)
+                try:
+                    spur_path = nx.dijkstra_path(graph_copy, spur_node, target, weight='weight')
+                    total_path = root_path + spur_path[1:]
+                    if total_path not in path_list_buffer:
+                        path_list_buffer += [total_path]
+                except nx.NetworkXNoPath:
+                    continue
+            if len(path_list_buffer) == 0:
+                break
+            path_length_buffer = [sum([self[path[i]][path[i + 1]]['weight']
+                                       for i in range(len(path) - 1)]) for path in path_list_buffer]
+            path_list_buffer = [p for _, p in sorted(zip(path_length_buffer, path_list_buffer))]
 
-        A.append(B[0])
-        A_len.append(sorted(lenB)[0])
-        B.remove(B[0])
+            for path in path_list_buffer:
+                time_sum = 0
+                for i in range((len(path) - 1) // 2):
+                    time_sum += max(self[path[i]][path[i + 1]]['weight'],
+                                    self[path[len(path) - i - 1]][path[len(path) - i - 2]]['weight'])
+                if (len(path) - 1) % 2 == 1:
+                    time_sum += self[path[(len(path) - 1) % 2]][path[(len(path) - 1) % 2 + 1]]['weight'] / 2
+                path_time_list.append(time_sum)
 
-    return A, A_len, A_time
+            path_list.append(path_list_buffer[0])
+            path_length_list.append(sorted(path_length_buffer)[0])
+            path_list_buffer.remove(path_list_buffer[0])
 
+        return path_list, path_length_list, path_time_list
 
-def optimal_route(G, source, target, k=3):
-    A, A_len, A_time = k_shortest_paths(G, source, target, k)
-    time = A_time[0]
-    distance = A_len[0]
-    route = A[0]
-    for i in range(1, len(A_len)):
-        if A_len[i] <= time * 2 and A_time[i] < time:
-            time = A_time[i]
-            distance = A_len[i]
-            route = A[i]
+    def load_data(self, json_file, data_set):
+        with open(json_file) as file:
+            sample = json.load(file)
+            for edge in sample[data_set]:
+                self.add_edge(
+                    sample[data_set][edge]['source'],
+                    sample[data_set][edge]['target'],
+                    weight=int(sample[data_set][edge]['weight'])
+                )
+
+    def optimal_route(self, source, target, k=3):
+        path_list, path_length_list, path_time_list = self.k_shortest_paths(source, target, k)
+        time = path_time_list[0]
+        distance = path_length_list[0]
+        route = path_list[0]
+        for i in range(1, len(path_length_list)):
+            if path_length_list[i] <= time * 2 and path_time_list[i] < time:
+                time = path_time_list[i]
+                distance = path_length_list[i]
+                route = path_list[i]
+            else:
+                break
         else:
-            break
-    else:
-        if k == len(A_len):
-            return optimal_route(G, source, target, k + 1)
-    return time, distance, route
+            if k == len(path_length_list):
+                return self.optimal_route(source, target, k + 1)
+        return time, distance, route

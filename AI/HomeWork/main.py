@@ -1,38 +1,19 @@
-import networkx as nx
-import json
-from route_generator import optimal_route
+from route_generator import RouteGenerator
 
 
-file = open("samples.json")
+SMALL = RouteGenerator()
+NORMAL = RouteGenerator()
 
-sample = json.load(file)
+SMALL.load_data("samples.json", "small_sample")
+NORMAL.load_data("samples.json", "normal_sample")
 
-SMALL = nx.Graph()
-NORMAL = nx.Graph()
 
-for edge in sample["small_sample"]:
-    SMALL.add_edge(
-        sample["small_sample"][edge]['source'],
-        sample["small_sample"][edge]['target'],
-        weight=int(sample["small_sample"][edge]['weight'])
-    )
-
-for edge in sample["normal_sample"]:
-    NORMAL.add_edge(
-        sample["normal_sample"][edge]['source'],
-        sample["normal_sample"][edge]['target'],
-        weight=int(sample["normal_sample"][edge]['weight'])
-    )
-
-time, distance, route = optimal_route(SMALL, 'A', 'G')
+time, distance, route = SMALL.optimal_route('A', 'G')
 print(time)
 print(distance)
 print(route)
 
-time, distance, route = optimal_route(NORMAL, 'Craiova', 'Oradea')
+time, distance, route = NORMAL.optimal_route('Craiova', 'Oradea')
 print(time)
 print(distance)
 print(route)
-
-
-file.close()
