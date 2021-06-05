@@ -10,8 +10,7 @@ def k_shortest_paths(G, source, target, k=1, weight='weight'):
 
     A = [nx.dijkstra_path(G, source, target, weight='weight')]
     A_len = [sum([G[A[0][l]][A[0][l + 1]]['weight'] for l in range(len(A[0]) - 1)])]
-    # A_time = [sum([max(G[A[0][l]][A[0][l + 1]]['weight'], G[A[0][l]][A[0][len(A[0]) - 1]]['weight'])
-    #           for l in range((len(A[0]) - 1)//2)])]
+
     time_sum = 0
     for i in range((len(A[0]) - 1)//2):
         time_sum += max(G[A[0][i]][A[0][i + 1]]['weight'],
@@ -20,6 +19,8 @@ def k_shortest_paths(G, source, target, k=1, weight='weight'):
         time_sum += G[A[0][(len(A[0]) - 1) % 2]][A[0][(len(A[0]) - 1) % 2 + 1]]['weight'] / 2
 
     A_time = [time_sum]
+
+    max_time = time_sum
 
     B = []
 
@@ -58,9 +59,26 @@ def k_shortest_paths(G, source, target, k=1, weight='weight'):
                 time_sum += G[path[(len(path) - 1) % 2]][path[(len(path) - 1) % 2 + 1]]['weight'] / 2
             A_time.append(time_sum)
 
-
         A.append(B[0])
         A_len.append(sorted(lenB)[0])
         B.remove(B[0])
 
     return A, A_len, A_time
+
+
+def optimal_route(G, source, target, k=3):
+    A, A_len, A_time = k_shortest_paths(G, source, target, k)
+    # global time, distance, route
+    time = A_time[0]
+    distance = A_len[0]
+    route = A[0]
+    for i in range(k):
+        if A_len[i] <= time * 2 and A_time[i] < time:
+            # nonlocal time, distance, route
+            time = A_time[i]
+            distance = A_len[i]
+            route = A[i]
+        else:
+            break
+        return optimal_route(G, source, target, k + 2)
+    return time, distance, route
