@@ -1,59 +1,38 @@
 import networkx as nx
-from route_generator import optimal_route, k_shortest_paths
-
-G = nx.Graph()
-G.add_edge('Craiova', 'Drobeta', weight=120)
-G.add_edge('Craiova', 'Pitesti', weight=138)
-G.add_edge('Craiova', 'Valcea', weight=146)
-G.add_edge('Drobeta', 'Mehadia', weight=75)
-G.add_edge('Pitesti', 'Bucuresti', weight=101)
-G.add_edge('Pitesti', 'Valcea', weight=97)
-G.add_edge('Valcea', 'Sibiu', weight=80)
-G.add_edge('Mehadia', 'Lugoj', weight=70)
-G.add_edge('Bucuresti', 'Giurgiu', weight=90)
-G.add_edge('Bucuresti', 'Urziceni', weight=85)
-G.add_edge('Bucuresti', 'Fagaras', weight=211)
-G.add_edge('Sibiu', 'Arad', weight=140)
-G.add_edge('Sibiu', 'Oradea', weight=151)
-G.add_edge('Sibiu', 'Fagaras', weight=99)
-G.add_edge('Lugoj', 'Timisoara', weight=111)
-G.add_edge('Urziceni', 'Hirsova', weight=98)
-G.add_edge('Urziceni', 'Vaslui', weight=142)
-G.add_edge('Arad', 'Zerind', weight=75)
-G.add_edge('Arad', 'Timisoara', weight=118)
-G.add_edge('Oradea', 'Zerind', weight=71)
-G.add_edge('Hirsova', 'Eforie', weight=86)
-G.add_edge('Vaslui', 'Iasi', weight=92)
-G.add_edge('Iasi', 'Neamt', weight=87)
-
-F = nx.Graph()
-F.add_edge('A', 'B', weight=1)
-F.add_edge('B', 'C', weight=5)
-F.add_edge('C', 'D', weight=12)
-F.add_edge('D', 'E', weight=4)
-F.add_edge('E', 'F', weight=6)
-F.add_edge('F', 'G', weight=10)
-F.add_edge('A', 'X', weight=9)
-F.add_edge('X', 'Y', weight=9)
-F.add_edge('Y', 'Z', weight=9)
-F.add_edge('Z', 'T', weight=9)
-F.add_edge('T', 'W', weight=9)
-F.add_edge('W', 'G', weight=9)
+import json
+from route_generator import optimal_route
 
 
+file = open("samples.json")
 
+sample = json.load(file)
 
-A, A_len, A_time = k_shortest_paths(F, 'A', 'G', 10)
-print(A)
-print(A_len)
-print(A_time)
+SMALL = nx.Graph()
+NORMAL = nx.Graph()
 
-time, distance, route = optimal_route(F, 'A', 'G')
+for edge in sample["small_sample"]:
+    SMALL.add_edge(
+        sample["small_sample"][edge]['source'],
+        sample["small_sample"][edge]['target'],
+        weight=int(sample["small_sample"][edge]['weight'])
+    )
+
+for edge in sample["normal_sample"]:
+    NORMAL.add_edge(
+        sample["normal_sample"][edge]['source'],
+        sample["normal_sample"][edge]['target'],
+        weight=int(sample["normal_sample"][edge]['weight'])
+    )
+
+time, distance, route = optimal_route(SMALL, 'A', 'G')
 print(time)
 print(distance)
 print(route)
 
-time, distance, route = optimal_route(G, 'Craiova', 'Oradea')
+time, distance, route = optimal_route(NORMAL, 'Craiova', 'Oradea')
 print(time)
 print(distance)
 print(route)
+
+
+file.close()
