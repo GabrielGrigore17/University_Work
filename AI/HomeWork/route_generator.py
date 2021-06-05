@@ -8,11 +8,10 @@ class RouteGenerator(nx.Graph):
     def __init__(self):
         nx.Graph.__init__(self)
 
-    def k_shortest_paths(self, source, target, k=1, weight='weight'):
+    def k_shortest_paths(self, source, target, k=1):
         # G is a networkx graph.
         # source and target are the labels for the source and target of the path.
         # k is the amount of desired paths.
-        # weight = 'weight' assumes a weighed graph. If this is undesired, use weight = None.
 
         path_list = [nx.dijkstra_path(self, source, target, weight='weight')]
         path_length_list = [sum([self[path_list[0][i]][path_list[0][i + 1]]['weight']
@@ -99,3 +98,17 @@ class RouteGenerator(nx.Graph):
             if k == len(path_length_list):
                 return self.optimal_route(source, target, k + 1)
         return time, distance, route
+
+    def print_optimal_route(self, source, target):
+        time, distance, route = self.optimal_route(source, target)
+        print(f"The optimal route between {source} and {target} "
+              f"will take {time} minutes and spans over {distance} kilometers")
+        if len(route) % 2 == 0:
+            print(f"The friends will meet halfway between {route[len(route)//2 - 1]} and {route[len(route)//2 ]}")
+        else:
+            print(f"The friends will meet in {route[len(route)//2]}")
+
+        print("The path is the following:")
+        for city in route:
+            print(city, end=" ")
+        print("\n")
