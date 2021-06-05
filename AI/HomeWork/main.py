@@ -1,5 +1,5 @@
 import networkx as nx
-from route_generator import optimal_route
+from route_generator import optimal_route, k_shortest_paths
 
 G = nx.Graph()
 G.add_edge('Craiova', 'Drobeta', weight=120)
@@ -26,10 +26,32 @@ G.add_edge('Hirsova', 'Eforie', weight=86)
 G.add_edge('Vaslui', 'Iasi', weight=92)
 G.add_edge('Iasi', 'Neamt', weight=87)
 
-# A, A_len, A_time = k_shortest_paths(G, 'Craiova', 'Oradea', 10)
-# print(A)
-# print(A_len)
-# print(A_time)
+F = nx.Graph()
+F.add_edge('A', 'B', weight=1)
+F.add_edge('B', 'C', weight=5)
+F.add_edge('C', 'D', weight=12)
+F.add_edge('D', 'E', weight=4)
+F.add_edge('E', 'F', weight=6)
+F.add_edge('F', 'G', weight=10)
+F.add_edge('A', 'X', weight=9)
+F.add_edge('X', 'Y', weight=9)
+F.add_edge('Y', 'Z', weight=9)
+F.add_edge('Z', 'T', weight=9)
+F.add_edge('T', 'W', weight=9)
+F.add_edge('W', 'G', weight=9)
+
+
+
+
+A, A_len, A_time = k_shortest_paths(F, 'A', 'G', 10)
+print(A)
+print(A_len)
+print(A_time)
+
+time, distance, route = optimal_route(F, 'A', 'G')
+print(time)
+print(distance)
+print(route)
 
 time, distance, route = optimal_route(G, 'Craiova', 'Oradea')
 print(time)

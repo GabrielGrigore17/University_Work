@@ -68,17 +68,17 @@ def k_shortest_paths(G, source, target, k=1, weight='weight'):
 
 def optimal_route(G, source, target, k=3):
     A, A_len, A_time = k_shortest_paths(G, source, target, k)
-    # global time, distance, route
     time = A_time[0]
     distance = A_len[0]
     route = A[0]
-    for i in range(k):
+    for i in range(1, len(A_len)):
         if A_len[i] <= time * 2 and A_time[i] < time:
-            # nonlocal time, distance, route
             time = A_time[i]
             distance = A_len[i]
             route = A[i]
         else:
             break
-        return optimal_route(G, source, target, k + 2)
+    else:
+        if k == len(A_len):
+            return optimal_route(G, source, target, k + 1)
     return time, distance, route
