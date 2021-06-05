@@ -1,123 +1,97 @@
-# Python program for Dijkstra's
-# single source shortest
-# path algorithm. The program
-# is for adjacency matrix
-# representation of the graph
-
-from collections import defaultdict
+import networkx as nx
+import copy as cp
 
 
-# Class to represent a graph
-class Graph:
+def k_shortest_paths(G, source, target, k=1, weight='weight'):
+    # G is a networkx graph.
+    # source and target are the labels for the source and target of the path.
+    # k is the amount of desired paths.
+    # weight = 'weight' assumes a weighed graph. If this is undesired, use weight = None.
 
-    # A utility function to find the
-    # vertex with minimum dist value, from
-    # the set of vertices still in queue
-    def minDistance(self, dist, queue):
-        # Initialize min value and min_index as -1
-        minimum = float("Inf")
-        min_index = -1
+    A = [nx.dijkstra_path(G, source, target, weight='weight')]
+    A_len = [sum([G[A[0][l]][A[0][l + 1]]['weight'] for l in range(len(A[0]) - 1)])]
+    # A_time = [sum([max(G[A[0][l]][A[0][l + 1]]['weight'], G[A[0][l]][A[0][len(A[0]) - 1]]['weight'])
+    #           for l in range((len(A[0]) - 1)//2)])]
+    time_sum = 0
+    for i in range((len(A[0]) - 1)//2):
+        time_sum += max(G[A[0][i]][A[0][i + 1]]['weight'],
+                        G[A[0][len(A[0]) - i - 1]][A[0][len(A[0]) - i - 2]]['weight'])
+    if (len(A[0]) - 1) % 2 == 1:
+        time_sum += G[A[0][(len(A[0]) - 1) % 2]][A[0][(len(A[0]) - 1) % 2 + 1]]['weight'] / 2
 
-        # from the dist array,pick one which
-        # has min value and is till in queue
-        for i in range(len(dist)):
-            if dist[i] < minimum and i in queue:
-                minimum = dist[i]
-                min_index = i
-        return min_index
+    A_time = [time_sum]
 
-    # Function to print shortest path
-    # from source to j
-    # using parent array
-    def printPath(self, parent, j):
+    B = []
 
-        # Base Case : If j is source
-        if parent[j] == -1:
-            print(j, end=' ')
-            return
-        self.printPath(parent, parent[j])
-        print(j, end=' ')
+    for i in range(1, k):
+        for j in range(0, len(A[-1]) - 1):
+            Gcopy = cp.deepcopy(G)
+            spur_node = A[-1][j]
+            rootpath = A[-1][:j + 1]
+            for path in A:
+                if rootpath == path[0:j + 1]:  # and len(path) > j?
+                    if Gcopy.has_edge(path[j], path[j + 1]):
+                        Gcopy.remove_edge(path[j], path[j + 1])
+                    if Gcopy.has_edge(path[j + 1], path[j]):
+                        Gcopy.remove_edge(path[j + 1], path[j])
+            for n in rootpath:
+                if n != spur_node:
+                    Gcopy.remove_node(n)
+            try:
+                spurpath = nx.dijkstra_path(Gcopy, spur_node, target, weight='weight')
+                totalpath = rootpath + spurpath[1:]
+                if totalpath not in B:
+                    B += [totalpath]
+            except nx.NetworkXNoPath:
+                continue
+        if len(B) == 0:
+            break
+        lenB = [sum([G[path[l]][path[l + 1]]['weight'] for l in range(len(path) - 1)]) for path in B]
+        B = [p for _, p in sorted(zip(lenB, B))]
 
-    # A utility function to print
-    # the constructed distance
-    # array
-    def printSolution(self, dist, parent):
-        src = 0
-        print("Vertex \t\tDistance from Source\tPath")
-        for i in range(1, len(dist)):
-            print("\n%d --> %d \t\t%d \t\t\t\t\t" % (src, i, dist[i])),
-            self.printPath(parent, i)
-
-    '''Function that implements Dijkstra's single source shortest path
-    algorithm for a graph represented using adjacency matrix
-    representation'''
-
-    def dijkstra(self, graph, src):
-
-        row = len(graph)
-        col = len(graph[0])
-
-        # The output array. dist[i] will hold
-        # the shortest distance from src to i
-        # Initialize all distances as INFINITE
-        dist = [float("Inf")] * row
-
-        # Parent array to store
-        # shortest path tree
-        parent = [-1] * row
-
-        # Distance of source vertex
-        # from itself is always 0
-        dist[src] = 0
-
-        # Add all vertices in queue
-        queue = []
-        for i in range(row):
-            queue.append(i)
-
-        # Find shortest path for all vertices
-        while queue:
-
-            # Pick the minimum dist vertex
-            # from the set of vertices
-            # still in queue
-            u = self.minDistance(dist, queue)
-
-            # remove min element
-            queue.remove(u)
-
-            # Update dist value and parent
-            # index of the adjacent vertices of
-            # the picked vertex. Consider only
-            # those vertices which are still in
-            # queue
-            for i in range(col):
-                '''Update dist[i] only if it is in queue, there is
-                an edge from u to i, and total weight of path from
-                src to i through u is smaller than current value of
-                dist[i]'''
-                if graph[u][i] and i in queue:
-                    if dist[u] + graph[u][i] < dist[i]:
-                        dist[i] = dist[u] + graph[u][i]
-                        parent[i] = u
-
-        # print the constructed distance array
-        self.printSolution(dist, parent)
+        for path in B:
+            time_sum = 0
+            for i in range((len(path) - 1)//2):
+                time_sum += max(G[path[i]][path[i + 1]]['weight'],
+                                G[path[len(path) - i - 1]][path[len(path) - i - 2]]['weight'])
+            if (len(path) - 1) % 2 == 1:
+                time_sum += G[path[(len(path) - 1) % 2]][path[(len(path) - 1) % 2 + 1]]['weight'] / 2
+            A_time.append(time_sum)
 
 
-g = Graph()
+        A.append(B[0])
+        A_len.append(sorted(lenB)[0])
+        B.remove(B[0])
 
-graph = [[0, 4, 0, 0, 0, 0, 0, 8, 0],
-         [4, 0, 8, 0, 0, 0, 0, 11, 0],
-         [0, 8, 0, 7, 0, 4, 0, 0, 2],
-         [0, 0, 7, 0, 9, 14, 0, 0, 0],
-         [0, 0, 0, 9, 0, 10, 0, 0, 0],
-         [0, 0, 4, 14, 10, 0, 2, 0, 0],
-         [0, 0, 0, 0, 0, 2, 0, 1, 6],
-         [8, 11, 0, 0, 0, 0, 1, 0, 7],
-         [0, 0, 2, 0, 0, 0, 6, 7, 0]
-         ]
+    return A, A_len, A_time
 
-# Print the solution
-g.dijkstra(graph, 0)
 
+G = nx.Graph()
+G.add_edge('Craiova', 'Drobeta', weight=120)
+G.add_edge('Craiova', 'Pitesti', weight=138)
+G.add_edge('Craiova', 'Valcea', weight=146)
+G.add_edge('Drobeta', 'Mehadia', weight=75)
+G.add_edge('Pitesti', 'Bucuresti', weight=101)
+G.add_edge('Pitesti', 'Valcea', weight=97)
+G.add_edge('Valcea', 'Sibiu', weight=80)
+G.add_edge('Mehadia', 'Lugoj', weight=70)
+G.add_edge('Bucuresti', 'Giurgiu', weight=90)
+G.add_edge('Bucuresti', 'Urziceni', weight=85)
+G.add_edge('Bucuresti', 'Fagaras', weight=211)
+G.add_edge('Sibiu', 'Arad', weight=140)
+G.add_edge('Sibiu', 'Oradea', weight=151)
+G.add_edge('Sibiu', 'Fagaras', weight=99)
+G.add_edge('Lugoj', 'Timisoara', weight=111)
+G.add_edge('Urziceni', 'Hirsova', weight=98)
+G.add_edge('Urziceni', 'Vaslui', weight=142)
+G.add_edge('Arad', 'Zerind', weight=75)
+G.add_edge('Arad', 'Timisoara', weight=118)
+G.add_edge('Oradea', 'Zerind', weight=71)
+G.add_edge('Hirsova', 'Eforie', weight=86)
+G.add_edge('Vaslui', 'Iasi', weight=92)
+G.add_edge('Iasi', 'Neamt', weight=87)
+
+A, A_len, A_time = k_shortest_paths(G, 'Craiova', 'Oradea', 10)
+print(A)
+print(A_len)
+print(A_time)
