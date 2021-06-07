@@ -22,7 +22,7 @@ class DataGenerator:
             self.min_e = min_edges
         else:
             self.min_e = self.n + 1
-        if max_edges < self.n * (self.n - 1) // 2:
+        if self.min_e < max_edges < self.n * (self.n - 1) // 2:
             self.max_e = max_edges
         else:
             self.max_e = self.n * (self.n - 1) // 2 - 1
@@ -30,30 +30,34 @@ class DataGenerator:
         self.e = random.randint(self.min_e, self.max_e)
 
     def json_dump_random_data(self, json_file):
-        cities = []
+        cities = []  # list to store all the cities in cities.txt
         with open("cities.txt", 'r') as cities_file:
             for city in cities_file:
                 cities.append(city)
+        # a list of n cities selected randomly
         random_cities = random.choices(cities, weights=None, cum_weights=None, k=self.n)
         edges = []
+        # the dictionary that will be stored in the json file
         data = {"data": {}}
         for edge in range(self.e):
             while True:
+                # selecting to cities and stripping off the \n character
                 source = random.choice(random_cities).strip()
                 target = random.choice(random_cities).strip()
-                if source == target:
+                if source == target:  # check for the same city
                     continue
-                if (source, target) in edges or (target, source) in edges:
+                if (source, target) in edges or (target, source) in edges:  # check if edge exists
                     continue
-                edges.append((source, target))
+                edges.append((source, target))  # storing edge if everything is ok
                 break
 
+            # adding every edge and assigning it a random weight within the interval
             data["data"][f"{edge + 1}"] = {
                 "source": f"{source}",
                 "target": f"{target}",
                 "weight": f"{random.randint(self.min_w, self.max_w)}"
             }
-        with open(json_file, 'w') as outfile:
+        with open(json_file, 'w') as outfile:  # dumping the dict into the json file
             json.dump(data, outfile)
 
 
